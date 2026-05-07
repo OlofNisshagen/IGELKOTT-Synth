@@ -1,0 +1,93 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc</FILE>
+  <FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\hw.asm</FILE>
+  <FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\resources.asm</FILE>
+  <FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE>
+  <FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE>
+  <FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\Debug\IGELKOTT.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>IGELKOTT.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>IGELKOTT.map</FILE>
+  <FILE>IGELKOTT.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <COLD><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>12</LINE></COLD>
+  <UPDATE_OSCILLATORS><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>1</LINE></UPDATE_OSCILLATORS>
+  <HW><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\hw.asm</FILE><LINE>1</LINE></HW>
+  <KEYS_PRESSED><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>4</LINE></KEYS_PRESSED>
+  <INITIALIZE_KEYS><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>8</LINE></INITIALIZE_KEYS>
+  <CHECK_KEYS><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>16</LINE></CHECK_KEYS>
+  <CHECK_BUTTONS><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>26</LINE></CHECK_BUTTONS>
+  <UPDATE_KNOBS><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>29</LINE></UPDATE_KNOBS>
+  <MASTER_VOLUME><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>18</LINE></MASTER_VOLUME>
+  <WAVEFORM><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>19</LINE></WAVEFORM>
+  <ENVELOPE_TICK><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>21</LINE></ENVELOPE_TICK>
+  <ENVELOPE_ATTACK><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>22</LINE></ENVELOPE_ATTACK>
+  <ENVELOPE_DECAY><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>23</LINE></ENVELOPE_DECAY>
+  <ENVELOPE_SUBSTAIN><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>24</LINE></ENVELOPE_SUBSTAIN>
+  <ENVELOPE_RELEASE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>25</LINE></ENVELOPE_RELEASE>
+  <OSCILLATORS_ACTIVE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>27</LINE></OSCILLATORS_ACTIVE>
+  <OSCILLATOR_0><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>28</LINE></OSCILLATOR_0>
+  <OSCILLATOR_1><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>29</LINE></OSCILLATOR_1>
+  <OSCILLATOR_2><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>30</LINE></OSCILLATOR_2>
+  <OSCILLATOR_3><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>31</LINE></OSCILLATOR_3>
+  <INITIALIZE_VALUES><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>34</LINE></INITIALIZE_VALUES>
+  <CLEAR_OSCILLATORS><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>55</LINE></CLEAR_OSCILLATORS>
+  <CLEAR_OSCILLATORS_LOOP><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>59</LINE></CLEAR_OSCILLATORS_LOOP>
+  <CLEAR_OSCILLATOR><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>68</LINE></CLEAR_OSCILLATOR>
+  <FIND_OSCILLATOR><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>78</LINE></FIND_OSCILLATOR>
+  <FIND_OSCILLATOR_LOOP><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>81</LINE></FIND_OSCILLATOR_LOOP>
+  <FOUND><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>90</LINE></FOUND>
+  <FIND_OSCILLATOR_EXIT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>87</LINE></FIND_OSCILLATOR_EXIT>
+  <ADD_TO_OSCILLATOR><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>101</LINE></ADD_TO_OSCILLATOR>
+  <ACTIVATE_OSCILLATOR><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>112</LINE></ACTIVATE_OSCILLATOR>
+  <ACTIVATE_OSCILLATOR_EXIT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>122</LINE></ACTIVATE_OSCILLATOR_EXIT>
+  <ACTIVATE_OSCILLATOR_LOOP><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>118</LINE></ACTIVATE_OSCILLATOR_LOOP>
+  <DEACTIVATE_OSCILLATOR><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>128</LINE></DEACTIVATE_OSCILLATOR>
+  <DEACTIVATE_OSCILLATOR_EXIT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>138</LINE></DEACTIVATE_OSCILLATOR_EXIT>
+  <DEACTIVATE_OSCILLATOR_LOOP><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>134</LINE></DEACTIVATE_OSCILLATOR_LOOP>
+  <SINE_TABLE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>147</LINE></SINE_TABLE>
+  <NOTES><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm</FILE><LINE>165</LINE></NOTES>
+  <UPDATE_ENVELOPE_TICK><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>18</LINE></UPDATE_ENVELOPE_TICK>
+  <OUTPUT_AUDIO><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>28</LINE></OUTPUT_AUDIO>
+  <UPDATE_TICK_EXIT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>25</LINE></UPDATE_TICK_EXIT>
+  <OUTPUT_LOOP><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>38</LINE></OUTPUT_LOOP>
+  <PLAY_NOTE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>52</LINE></PLAY_NOTE>
+  <ADSR><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>86</LINE></ADSR>
+  <WAVE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>175</LINE></WAVE>
+  <PLAY_NOTE_EXIT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>78</LINE></PLAY_NOTE_EXIT>
+  <ADSR_TABLE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>95</LINE></ADSR_TABLE>
+  <ATTACK><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>102</LINE></ATTACK>
+  <DECAY><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>122</LINE></DECAY>
+  <SUBSTAIN><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>143</LINE></SUBSTAIN>
+  <RELEASE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>146</LINE></RELEASE>
+  <ATTACK_INSTANT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>117</LINE></ATTACK_INSTANT>
+  <ADSR_ACC><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>170</LINE></ADSR_ACC>
+  <NEXT_PHASE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>166</LINE></NEXT_PHASE>
+  <DECAY_INSTANT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>138</LINE></DECAY_INSTANT>
+  <RELEASE_INSTANT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>161</LINE></RELEASE_INSTANT>
+  <WAVE_TABLE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>181</LINE></WAVE_TABLE>
+  <SINE_WAVE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>187</LINE></SINE_WAVE>
+  <SQUARE_WAVE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>199</LINE></SQUARE_WAVE>
+  <SAWTOOTH_WAVE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>204</LINE></SAWTOOTH_WAVE>
+  <TRIANGLE_WAVE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>209</LINE></TRIANGLE_WAVE>
+  <WARM><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>23</LINE></WARM>
+  <MAIN><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>27</LINE></MAIN>
+ </LABELS>
+</ASSEMBLER_INFO>

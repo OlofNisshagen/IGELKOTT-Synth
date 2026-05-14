@@ -42,3 +42,10 @@
 	subi ZL, -@0
 	adc ZH, r2
 .endmacro
+
+.macro STI
+	push r16
+	ldi r16, @1
+	sts @0, r16
+	pop r16
+.endmacro

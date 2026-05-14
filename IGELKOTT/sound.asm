@@ -5,8 +5,10 @@ UPDATE_OSCILLATORS:
 	push r23
 
 	clr r23
+
 	rcall UPDATE_ENVELOPE_TICK
 	rcall OUTPUT_AUDIO
+
 	sts OCR1AL, r23
 	
 	pop r23
@@ -20,8 +22,7 @@ UPDATE_ENVELOPE_TICK:
 	dec r16
 	sts ENVELOPE_TICK, r16
 	brne UPDATE_TICK_EXIT
-	ldi r16, ENVELOPE_PRESCALER
-	sts ENVELOPE_TICK, r16
+	sti ENVELOPE_TICK, ENVELOPE_PRESCALER
 UPDATE_TICK_EXIT:
 	ret
 
@@ -88,6 +89,7 @@ ADSR:
 	ldd r16, y+4
 	ldd r18, y+5			 ;acc
 	ldd r20, y+6			 ;envelope volume
+
 	ldi ZL, low(ADSR_TABLE)
 	ldi ZH, high(ADSR_TABLE)
 	addz  r16

@@ -3,8 +3,8 @@
 .org 0x000E             ; Adressen för Timer 2 Compare Match A (ATmega328P)
     rjmp UPDATE_OSCILLATORS
 
-.include "hw.asm"
 .include "resources.asm"
+.include "hw.asm"
 .include "keys.asm"
 .include "sound_lib.asm"
 .include "sound.asm"

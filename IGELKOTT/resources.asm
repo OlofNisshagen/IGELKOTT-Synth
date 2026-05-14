@@ -49,3 +49,9 @@
 	sts @0, r16
 	pop r16
 .endmacro
+
+.macro LIJ ;@0 TABLE, @1 Register
+	ldi ZL, low(@0)
+	ldi ZH, high(@0)
+	addz @1
+.endmacro

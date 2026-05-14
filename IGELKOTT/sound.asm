@@ -57,15 +57,7 @@ PLAY_NOTE:
 	push r19
 	push r20
 
-    ldd r16, y+0 ;step low
-    ldd r17, y+1 ;step high
-    ldd r18, y+2 ;acc low
-    ldd r19, y+3 ;acc high
-    add r18, r16
-    adc r19, r17
-	std y+2, r18            
-    std y+3, r19
-
+	rcall UPDATE_ACCUMULATOR
 	rcall ADSR
 
 	lds r17, MASTER_VOLUME
@@ -84,16 +76,30 @@ PLAY_NOTE_EXIT:
 	pop r16
 	ret
 	
+UPDATE_ACCUMULATOR:
+	ldd r16, y+0 ;step low
+    ldd r17, y+1 ;step high
+    ldd r18, y+2 ;acc low
+    ldd r19, y+3 ;acc high
+    add r18, r16
+    adc r19, r17
+	std y+2, r18            
+    std y+3, r19
+	ret
+
 ADSR:
 	push r21
+	push ZL
+	push ZH
 	ldd r16, y+4
 	ldd r18, y+5			 ;acc
 	ldd r20, y+6			 ;envelope volume
 
+	;lij ADSR_TABLE, r16
 	ldi ZL, low(ADSR_TABLE)
 	ldi ZH, high(ADSR_TABLE)
-	addz  r16
-	ijmp 
+	addz r16
+	ijmp
 ADSR_TABLE:
 	rjmp ATTACK
 	rjmp DECAY
@@ -171,11 +177,17 @@ NEXT_PHASE:
 	clr r18
 ADSR_ACC:
 	std y+5, r18
+	pop ZH
+	pop ZL
 	pop r21
 	ret
 
 WAVE:
+	push ZL
+	push ZH
 	lds r16, WAVEFORM
+	;lij WAVE_TABLE, r16
+
 	ldi ZL, low(WAVE_TABLE)
 	ldi ZH, high(WAVE_TABLE)
 	addz r16
@@ -196,17 +208,17 @@ SINE_WAVE:
 	add r23, r1
 	pop ZH
 	pop ZL
-	ret
+	rjmp WAVE_EXIT
 
 SQUARE_WAVE:
 	sbrc r19, 7
 	add r23, r17
-	ret
+	rjmp WAVE_EXIT
 
 SAWTOOTH_WAVE:
 	mul r19, r17    ; Scale by volume
     add r23, r1     ; Add high byte to mixer
-	ret
+	rjmp WAVE_EXIT
 
 TRIANGLE_WAVE:
 	push r19
@@ -216,4 +228,9 @@ TRIANGLE_WAVE:
     mul r19, r17    ; Scale by volume
     add r23, r1     ; Add high byte to mixer
 	pop r19
+	rjmp WAVE_EXIT
+
+WAVE_EXIT:
+	pop ZH
+	pop ZL
 	ret

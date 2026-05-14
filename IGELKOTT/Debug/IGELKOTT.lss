@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm Tue May 12 13:19:56 2026
+AVRASM ver. 2.2.8  C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm Thu May 14 13:10:55 2026
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(6): Including file 'C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\resources.asm'
@@ -995,7 +995,7 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(10): In
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
-000000 c1e9                          rjmp COLD
+000000 c1f4                          rjmp COLD
                                  .org 0x000E             ; Adressen för Timer 2 Compare Match A (ATmega328P)
 00000e c11b                          rjmp UPDATE_OSCILLATORS
                                  
@@ -1050,6 +1050,12 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(10): In
                                  	ldi r16, @1
                                  	sts @0, r16
                                  	pop r16
+                                 .endmacro
+                                 
+                                 .macro LIJ ;@0 TABLE, @1 Register
+                                 	ldi ZL, low(@0)
+                                 	ldi ZH, high(@0)
+                                 	addz @1
                                  .include "hw.asm"
                                  
 00000f 9a21                      	sbi DDRB, 1
@@ -1129,8 +1135,6 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(10): In
 000039 9508                      
                                  .equ ACC_MAX = 65536
                                  
-                                 ;.equ Ash = 2000
-                                 
                                  .equ OSCILLATOR_SIZE = 8
                                  .equ VOICES_AMOUNT = 4
                                  
@@ -1169,21 +1173,21 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(10): In
 000041 9300 0105
 000043 910f                      	sti WAVEFORM, 1
 000044 930f
-000045 ef0f
+000045 ee06
 000046 9300 0107
-000048 910f                      	sti ENVELOPE_ATTACK, 255
+000048 910f                      	sti ENVELOPE_ATTACK, 230
 000049 930f
-00004a ef0f
+00004a ee06
 00004b 9300 0108
-00004d 910f                      	sti ENVELOPE_DECAY, 255
+00004d 910f                      	sti ENVELOPE_DECAY, 230
 00004e 930f
 00004f e800
 000050 9300 0109
 000052 910f                      	sti ENVELOPE_SUBSTAIN, 128
 000053 930f
-000054 ef0f
+000054 e800
 000055 9300 010a
-000057 910f                      	sti ENVELOPE_RELEASE, 255
+000057 910f                      	sti ENVELOPE_RELEASE, 128
 000058 9508                      	ret
                                  
                                  CLEAR_OSCILLATORS:
@@ -1209,7 +1213,6 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(10): In
 00006a 822c                      	std y+4, r2
 00006b 822d                      	std y+5, r2
 00006c 822e                      	std y+6, r2
-                                 
 00006d 9508                      	ret
                                  
                                  FIND_OSCILLATOR:
@@ -1280,7 +1283,6 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(10): In
 0000a5 912f                      	pop r18
 0000a6 9508                      	ret
                                  
-                                 ; Sine Table: 256 bytes, values 0-255 (centered at 128)
                                  SINE_TABLE:
 0000a7 8380
 0000a8 8986
@@ -1412,14 +1414,11 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(10): In
 000126 7c79                      	.db  78,  81,  84,  87,  90,  93,  96,  99, 103, 106, 109, 112, 115, 118, 121, 124
                                  
                                  NOTES:
-000127 2606
+000127 2606                      .include "sound.asm"
 000128 884a
-C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm(153): warning: .cseg .db misalignment - padding zero byte
-C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(9): 'C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound_lib.asm' included form here
-000129 00b8                      	.db 262, 294, 330, 392, 440
-                                 
-                                 .include "sound.asm"
-                                 
+C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm(1): warning: .cseg .db misalignment - padding zero byte
+C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(10): 'C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm' included form here
+000129 00b8                      
 00012a 930f                      	push r16
 00012b b70f                          in r16, SREG
 00012c 930f                          push r16
@@ -1483,190 +1482,212 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(9): 'C:
 00015c 933f                      	push r19
 00015d 934f                      	push r20
                                  
-00015e 8108                          ldd r16, y+0 ;step low
-00015f 8119                          ldd r17, y+1 ;step high
-000160 812a                          ldd r18, y+2 ;acc low
-000161 813b                          ldd r19, y+3 ;acc high
-000162 0f20                          add r18, r16
-000163 1f31                          adc r19, r17
-000164 832a                      	std y+2, r18            
-000165 833b                          std y+3, r19
+00015e d00e                      	rcall UPDATE_ACCUMULATOR
+00015f d016                      	rcall ADSR
                                  
-000166 d00d                      	rcall ADSR
+000160 9110 0104                 	lds r17, MASTER_VOLUME
+000162 9f14                      	mul r17, r20
+000163 2d11                      	mov r17, r1
+000164 9516                      	lsr r17
+000165 9516                      	lsr r17
                                  
-000167 9110 0104                 	lds r17, MASTER_VOLUME
-000169 9f14                      	mul r17, r20
-00016a 2d11                      	mov r17, r1
-00016b 9516                      	lsr r17
-00016c 9516                      	lsr r17
-                                 
-00016d d057                      	rcall WAVE
+000166 d064                      	rcall WAVE
                                  
                                  PLAY_NOTE_EXIT:
-00016e 914f                      	pop r20
-00016f 913f                      	pop r19
-000170 912f                      	pop r18
-000171 911f                      	pop r17
-000172 910f                      	pop r16
-000173 9508                      	ret
+000167 914f                      	pop r20
+000168 913f                      	pop r19
+000169 912f                      	pop r18
+00016a 911f                      	pop r17
+00016b 910f                      	pop r16
+00016c 9508                      	ret
                                  	
-                                 ADSR:
-000174 935f                      	push r21
-000175 810c                      	ldd r16, y+4
-000176 812d                      	ldd r18, y+5			 ;acc
-000177 814e                      	ldd r20, y+6			 ;envelope volume
+                                 UPDATE_ACCUMULATOR:
+00016d 8108                      	ldd r16, y+0 ;step low
+00016e 8119                          ldd r17, y+1 ;step high
+00016f 812a                          ldd r18, y+2 ;acc low
+000170 813b                          ldd r19, y+3 ;acc high
+000171 0f20                          add r18, r16
+000172 1f31                          adc r19, r17
+000173 832a                      	std y+2, r18            
+000174 833b                          std y+3, r19
+000175 9508                      	ret
                                  
-000178 e7ed                      	ldi ZL, low(ADSR_TABLE)
-000179 e0f1                      	ldi ZH, high(ADSR_TABLE)
-00017a 0fe0
-00017b 1df2                      	addz  r16
-00017c 9409                      	ijmp 
+                                 ADSR:
+000176 935f                      	push r21
+000177 93ef                      	push ZL
+000178 93ff                      	push ZH
+000179 810c                      	ldd r16, y+4
+00017a 812d                      	ldd r18, y+5			 ;acc
+00017b 814e                      	ldd r20, y+6			 ;envelope volume
+                                 
+                                 	;lij ADSR_TABLE, r16
+00017c e8e1                      	ldi ZL, low(ADSR_TABLE)
+00017d e0f1                      	ldi ZH, high(ADSR_TABLE)
+00017e 0fe0
+00017f 1df2                      	addz r16
+000180 9409                      	ijmp
                                  ADSR_TABLE:
-00017d c004                      	rjmp ATTACK
-00017e c016                      	rjmp DECAY
-00017f c02b                      	rjmp SUBSTAIN
-000180 c02b                      	rjmp RELEASE
-000181 cee4                      	rjmp CLEAR_OSCILLATOR
+000181 c004                      	rjmp ATTACK
+000182 c016                      	rjmp DECAY
+000183 c02b                      	rjmp SUBSTAIN
+000184 c02b                      	rjmp RELEASE
+000185 cee0                      	rjmp CLEAR_OSCILLATOR
                                  	
                                  ATTACK:
-000182 9110 0107                 	lds r17, ENVELOPE_ATTACK ;step
-000184 2311                      	tst r17
-000185 f061                      	breq ATTACK_INSTANT
-000186 9510                      	com r17
-000187 9150 0106                 	lds r21, ENVELOPE_TICK
-000189 3058                      	cpi r21, ENVELOPE_PRESCALER
-00018a f5b9                      	brne ADSR_ACC
-00018b 0f21                      	add r18, r17
-00018c f5a8                      	brcc ADSR_ACC
-00018d 9543                      	inc r20
-00018e 834e                      	std y+6, r20
-00018f 3f4f                      	cpi r20, $FF
-000190 f171                      	breq NEXT_PHASE
-000191 c030                      	rjmp ADSR_ACC
+000186 9110 0107                 	lds r17, ENVELOPE_ATTACK ;step
+000188 2311                      	tst r17
+000189 f061                      	breq ATTACK_INSTANT
+00018a 9510                      	com r17
+00018b 9150 0106                 	lds r21, ENVELOPE_TICK
+00018d 3058                      	cpi r21, ENVELOPE_PRESCALER
+00018e f5b9                      	brne ADSR_ACC
+00018f 0f21                      	add r18, r17
+000190 f5a8                      	brcc ADSR_ACC
+000191 9543                      	inc r20
+000192 834e                      	std y+6, r20
+000193 3f4f                      	cpi r20, $FF
+000194 f171                      	breq NEXT_PHASE
+000195 c030                      	rjmp ADSR_ACC
                                  ATTACK_INSTANT:
-000192 ef4f                      	ldi r20, $FF
-000193 834e                      	std y+6, r20
-000194 c02a                      	rjmp NEXT_PHASE
+000196 ef4f                      	ldi r20, $FF
+000197 834e                      	std y+6, r20
+000198 c02a                      	rjmp NEXT_PHASE
                                  	
                                  DECAY:
-000195 9110 0108                 	lds r17, ENVELOPE_DECAY ;step
-000197 2311                      	tst r17
-000198 f071                      	breq DECAY_INSTANT
-000199 9510                      	com r17
-00019a 9150 0106                 	lds r21, ENVELOPE_TICK
-00019c 3058                      	cpi r21, ENVELOPE_PRESCALER
-00019d f521                      	brne ADSR_ACC
-00019e 0f21                      	add r18, r17
-00019f f510                      	brcc ADSR_ACC
-0001a0 954a                      	dec r20
-0001a1 834e                      	std y+6, r20
-0001a2 9150 0109                 	lds r21, ENVELOPE_SUBSTAIN
-0001a4 1745                      	cp r20, r21
-0001a5 f0c9                      	breq NEXT_PHASE
-0001a6 c01b                      	rjmp ADSR_ACC
+000199 9110 0108                 	lds r17, ENVELOPE_DECAY ;step
+00019b 2311                      	tst r17
+00019c f071                      	breq DECAY_INSTANT
+00019d 9510                      	com r17
+00019e 9150 0106                 	lds r21, ENVELOPE_TICK
+0001a0 3058                      	cpi r21, ENVELOPE_PRESCALER
+0001a1 f521                      	brne ADSR_ACC
+0001a2 0f21                      	add r18, r17
+0001a3 f510                      	brcc ADSR_ACC
+0001a4 954a                      	dec r20
+0001a5 834e                      	std y+6, r20
+0001a6 9150 0109                 	lds r21, ENVELOPE_SUBSTAIN
+0001a8 1745                      	cp r20, r21
+0001a9 f0c9                      	breq NEXT_PHASE
+0001aa c01b                      	rjmp ADSR_ACC
                                  DECAY_INSTANT:
-0001a7 9140 0109                 	lds r20, ENVELOPE_SUBSTAIN
-0001a9 834e                      	std y+6, r20
-0001aa c014                      	rjmp NEXT_PHASE
+0001ab 9140 0109                 	lds r20, ENVELOPE_SUBSTAIN
+0001ad 834e                      	std y+6, r20
+0001ae c014                      	rjmp NEXT_PHASE
                                  	
                                  SUBSTAIN:
-0001ab c016                      	rjmp ADSR_ACC
+0001af c016                      	rjmp ADSR_ACC
                                  	
                                  RELEASE:
-0001ac 9110 010a                 	lds r17, ENVELOPE_RELEASE ;step
-0001ae 2311                      	tst r17
-0001af f061                      	breq RELEASE_INSTANT
-0001b0 9510                      	com r17
-0001b1 9150 0106                 	lds r21, ENVELOPE_TICK
-0001b3 3058                      	cpi r21, ENVELOPE_PRESCALER
-0001b4 f469                      	brne ADSR_ACC
-0001b5 0f21                      	add r18, r17
-0001b6 f458                      	brcc ADSR_ACC
-0001b7 954a                      	dec r20
-0001b8 834e                      	std y+6, r20
-0001b9 2344                      	tst r20
-0001ba f021                      	breq NEXT_PHASE
-0001bb c006                      	rjmp ADSR_ACC
+0001b0 9110 010a                 	lds r17, ENVELOPE_RELEASE ;step
+0001b2 2311                      	tst r17
+0001b3 f061                      	breq RELEASE_INSTANT
+0001b4 9510                      	com r17
+0001b5 9150 0106                 	lds r21, ENVELOPE_TICK
+0001b7 3058                      	cpi r21, ENVELOPE_PRESCALER
+0001b8 f469                      	brne ADSR_ACC
+0001b9 0f21                      	add r18, r17
+0001ba f458                      	brcc ADSR_ACC
+0001bb 954a                      	dec r20
+0001bc 834e                      	std y+6, r20
+0001bd 2344                      	tst r20
+0001be f021                      	breq NEXT_PHASE
+0001bf c006                      	rjmp ADSR_ACC
                                  RELEASE_INSTANT:
-0001bc 2744                      	clr r20
-0001bd 834e                      	std y+6, r20
-0001be c000                      	rjmp NEXT_PHASE
+0001c0 2744                      	clr r20
+0001c1 834e                      	std y+6, r20
+0001c2 c000                      	rjmp NEXT_PHASE
                                  
                                  NEXT_PHASE:
-0001bf 9503                      	inc r16
-0001c0 830c                      	std y+4, r16
-0001c1 2722                      	clr r18
+0001c3 9503                      	inc r16
+0001c4 830c                      	std y+4, r16
+0001c5 2722                      	clr r18
                                  ADSR_ACC:
-0001c2 832d                      	std y+5, r18
-0001c3 915f                      	pop r21
-0001c4 9508                      	ret
+0001c6 832d                      	std y+5, r18
+0001c7 91ff                      	pop ZH
+0001c8 91ef                      	pop ZL
+0001c9 915f                      	pop r21
+0001ca 9508                      	ret
                                  
                                  WAVE:
-0001c5 9100 0105                 	lds r16, WAVEFORM
-0001c7 ecec                      	ldi ZL, low(WAVE_TABLE)
-0001c8 e0f1                      	ldi ZH, high(WAVE_TABLE)
-0001c9 0fe0
-0001ca 1df2                      	addz r16
-0001cb 9409                      	ijmp
+0001cb 93ef                      	push ZL
+0001cc 93ff                      	push ZH
+0001cd 9100 0105                 	lds r16, WAVEFORM
+                                 	;lij WAVE_TABLE, r16
+                                 
+0001cf ede4                      	ldi ZL, low(WAVE_TABLE)
+0001d0 e0f1                      	ldi ZH, high(WAVE_TABLE)
+0001d1 0fe0
+0001d2 1df2                      	addz r16
+0001d3 9409                      	ijmp
                                  WAVE_TABLE:
-0001cc c003                      	rjmp SINE_WAVE
-0001cd c00e                      	rjmp SQUARE_WAVE
-0001ce c010                      	rjmp SAWTOOTH_WAVE
-0001cf c012                      	rjmp TRIANGLE_WAVE
+0001d4 c003                      	rjmp SINE_WAVE
+0001d5 c00e                      	rjmp SQUARE_WAVE
+0001d6 c010                      	rjmp SAWTOOTH_WAVE
+0001d7 c012                      	rjmp TRIANGLE_WAVE
                                  
                                  SINE_WAVE:
-0001d0 93ef                      	push ZL
-0001d1 93ff                      	push ZH
-0001d2 e4ee
-0001d3 e0f1                      	loadz SINE_TABLE
-0001d4 0fe3
-0001d5 1df2                      	addz r19
-0001d6 9104                      	lpm r16, Z
-0001d7 9f01                      	mul r16, r17
-0001d8 0d71                      	add r23, r1
-0001d9 91ff                      	pop ZH
-0001da 91ef                      	pop ZL
-0001db 9508                      	ret
+0001d8 93ef                      	push ZL
+0001d9 93ff                      	push ZH
+0001da e4ee
+0001db e0f1                      	loadz SINE_TABLE
+0001dc 0fe3
+0001dd 1df2                      	addz r19
+0001de 9104                      	lpm r16, Z
+0001df 9f01                      	mul r16, r17
+0001e0 0d71                      	add r23, r1
+0001e1 91ff                      	pop ZH
+0001e2 91ef                      	pop ZL
+0001e3 c00e                      	rjmp WAVE_EXIT
                                  
                                  SQUARE_WAVE:
-0001dc fd37                      	sbrc r19, 7
-0001dd 0f71                      	add r23, r17
-0001de 9508                      	ret
+0001e4 fd37                      	sbrc r19, 7
+0001e5 0f71                      	add r23, r17
+0001e6 c00b                      	rjmp WAVE_EXIT
                                  
                                  SAWTOOTH_WAVE:
-0001df 9f31                      	mul r19, r17    ; Scale by volume
-0001e0 0d71                          add r23, r1     ; Add high byte to mixer
-0001e1 9508                      	ret
+0001e7 9f31                      	mul r19, r17    ; Scale by volume
+0001e8 0d71                          add r23, r1     ; Add high byte to mixer
+0001e9 c008                      	rjmp WAVE_EXIT
                                  
                                  TRIANGLE_WAVE:
-0001e2 933f                      	push r19
-0001e3 fd37                          sbrc r19, 7     ; Is it the second half of the wave?
-0001e4 9530                          com r19         ; If bit 7 is set, invert the value (creates the "down" slope)
-0001e5 0f33                          lsl r19         ; Multiply by 2 to keep the amplitude full (0-255)
-0001e6 9f31                          mul r19, r17    ; Scale by volume
-0001e7 0d71                          add r23, r1     ; Add high byte to mixer
-0001e8 913f                      	pop r19
-0001e9 9508                      
-                                 COLD:
-0001ea ef0f                      	ldi r16, LOW(RAMEND)
-0001eb bf0d                      	out SPL, r16
-0001ec e008                      	ldi r16, HIGH(RAMEND)
-0001ed bf0e                      	out SPH, r16
+0001ea 933f                      	push r19
+0001eb fd37                          sbrc r19, 7     ; Is it the second half of the wave?
+0001ec 9530                          com r19         ; If bit 7 is set, invert the value (creates the "down" slope)
+0001ed 0f33                          lsl r19         ; Multiply by 2 to keep the amplitude full (0-255)
+0001ee 9f31                          mul r19, r17    ; Scale by volume
+0001ef 0d71                          add r23, r1     ; Add high byte to mixer
+0001f0 913f                      	pop r19
+0001f1 c000                      	rjmp WAVE_EXIT
                                  
-0001ee de20                      	rcall HW
-0001ef de69                      	rcall CLEAR_OSCILLATORS
-0001f0 de49                      	rcall INITIALIZE_VALUES
-0001f1 de3e                      	rcall INITIALIZE_KEYS
+                                 WAVE_EXIT:
+0001f2 91ff                      	pop ZH
+0001f3 91ef                      	pop ZL
+0001f4 9508                      
+                                 COLD:
+0001f5 ef0f                      	ldi r16, LOW(RAMEND)
+0001f6 bf0d                      	out SPL, r16
+0001f7 e008                      	ldi r16, HIGH(RAMEND)
+0001f8 bf0e                      	out SPH, r16
+                                 
+0001f9 de15                      	rcall HW
+0001fa de5e                      	rcall CLEAR_OSCILLATORS
+0001fb de3e                      	rcall INITIALIZE_VALUES
+0001fc de33                      	rcall INITIALIZE_KEYS
                                  
                                  WARM:
-0001f2 e705
-0001f3 e012
-0001f4 de79                      	note 600
-0001f5 9478                      	sei
+0001fd e50a
+0001fe e011
+0001ff de6e                      	note 330
+000200 ec0d
+000201 e011
+000202 de6b                      	note 440
+                                 
+000203 9478                      	sei
                                  
                                  MAIN:
-0001f6 de40                      	rcall CHECK_KEYS
-0001f7 cffe                      	rjmp MAIN
+                                 	;rcall CHECK_KEYS
+000204 df25                      	rcall UPDATE_OSCILLATORS
+000205 cffe                      	rjmp MAIN
 
 
 RESOURCE USE INFORMATION
@@ -1686,9 +1707,9 @@ counted separately from r26..r31 here.
 "ATmega328P" register use summary:
 x  :  12 y  :  24 z  :   1 r0 :   1 r1 :   4 r2 :  25 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  93 r17:  33 r18:  30 r19:  17 r20:  21 
+r13:   0 r14:   0 r15:   0 r16:  94 r17:  34 r18:  30 r19:  17 r20:  21 
 r21:  10 r22:   0 r23:   8 r24:   0 r25:   0 r26:   3 r27:   3 r28:   6 
-r29:   6 r30:   8 r31:   8 
+r29:   6 r30:  12 r31:  12 
 Registers used: 19 out of 35 (54.3%)
 
 "ATmega328P" instruction use summary:
@@ -1702,10 +1723,10 @@ clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   5 cls   :   0
 clt   :   0 clv   :   0 clz   :   0 com   :   4 cp    :   1 cpc   :   0 
 cpi   :   4 cpse  :   0 dec   :   8 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   2 in    :   1 inc   :   2 jmp   :   0 
-ld    :   0 ldd   :   7 ldi   :  40 lds   :  15 lpm   :   2 lsl   :   3 
+ld    :   0 ldd   :   7 ldi   :  42 lds   :  15 lpm   :   2 lsl   :   3 
 lsr   :   4 mov   :   1 movw  :   0 mul   :   5 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   1 ori   :   0 out   :   5 pop   :  30 
-push  :  30 rcall :  14 ret   :  20 reti  :   1 rjmp  :  21 rol   :   0 
+neg   :   0 nop   :   0 or    :   1 ori   :   0 out   :   5 pop   :  34 
+push  :  34 rcall :  16 ret   :  18 reti  :   1 rjmp  :  25 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   0 sbi   :   1 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   3 sbrs  :   1 sec   :   0 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
@@ -1716,7 +1737,7 @@ Instructions used: 40 out of 113 (35.4%)
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0003f0    720    262    982   32768   3.0%
+[.cseg] 0x000000 0x00040c    748    262   1010   32768   3.1%
 [.dseg] 0x000100 0x00012c      0     44     44    2048   2.1%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

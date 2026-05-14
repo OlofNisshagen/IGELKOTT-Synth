@@ -21,9 +21,12 @@ COLD:
 	rcall INITIALIZE_KEYS
 
 WARM:
-	note 600
+	note 330
+	note 440
+
 	sei
 
 MAIN:
-	rcall CHECK_KEYS
+	;rcall CHECK_KEYS
+	rcall UPDATE_OSCILLATORS
 	rjmp MAIN

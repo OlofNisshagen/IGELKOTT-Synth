@@ -1,7 +1,4 @@
 UPDATE_OSCILLATORS:
-	push r16
-    in r16, SREG
-    push r16
 	push r23
 
 	clr r23
@@ -12,10 +9,7 @@ UPDATE_OSCILLATORS:
 	sts OCR1AL, r23
 	
 	pop r23
-	pop r16
-    out SREG, r16
-    pop r16
-	reti
+	ret
 
 UPDATE_ENVELOPE_TICK:
 	lds r16, ENVELOPE_TICK
@@ -56,8 +50,10 @@ PLAY_NOTE:
 	push r18
 	push r19
 	push r20
+	push r21
 
 	rcall UPDATE_ACCUMULATOR
+
 	rcall ADSR
 
 	lds r17, MASTER_VOLUME
@@ -69,6 +65,7 @@ PLAY_NOTE:
 	rcall WAVE
 
 PLAY_NOTE_EXIT:
+	pop r21
 	pop r20
 	pop r19
 	pop r18
@@ -88,40 +85,49 @@ UPDATE_ACCUMULATOR:
 	ret
 
 ADSR:
-	push r21
-	push ZL
-	push ZH
 	ldd r16, y+4
 	ldd r18, y+5			 ;acc
 	ldd r20, y+6			 ;envelope volume
 
-	;lij ADSR_TABLE, r16
-	ldi ZL, low(ADSR_TABLE)
-	ldi ZH, high(ADSR_TABLE)
-	addz r16
-	ijmp
-ADSR_TABLE:
-	rjmp ATTACK
-	rjmp DECAY
-	rjmp SUBSTAIN
+	ldi r17, ENVELOPE_PRESCALER
+	lds r21, ENVELOPE_TICK
+	cpse r21, r17
+	rjmp ADSR_EXIT
+
+	cpi r16, 3 ;release
+	brsh RELEASE
+
+	lds r21, KEYS_PRESSED
+	tst r21
+	breq SET_RELEASE
+
+	cpi r16, 0 ;attack
+	breq ATTACK
+	cpi r16, 1 ;decay
+	breq DECAY
+	cpi r16, 2 ;substain
+	breq SUBSTAIN
+	rjmp ADSR_EXIT ;for safety
+
+SET_RELEASE:
+	ldi r16, 3
+	std y+4, r16
+	clr r18
+	std y+5, r18
 	rjmp RELEASE
-	rjmp CLEAR_OSCILLATOR
 	
 ATTACK:
 	lds r17, ENVELOPE_ATTACK ;step
 	tst r17
 	breq ATTACK_INSTANT
 	com r17
-	lds r21, ENVELOPE_TICK
-	cpi r21, ENVELOPE_PRESCALER
-	brne ADSR_ACC
 	add r18, r17
-	brcc ADSR_ACC
+	brcc ADSR_EXIT
 	inc r20
 	std y+6, r20
 	cpi r20, $FF
 	breq NEXT_PHASE
-	rjmp ADSR_ACC
+	rjmp ADSR_EXIT
 ATTACK_INSTANT:
 	ldi r20, $FF
 	std y+6, r20
@@ -132,64 +138,62 @@ DECAY:
 	tst r17
 	breq DECAY_INSTANT
 	com r17
-	lds r21, ENVELOPE_TICK
-	cpi r21, ENVELOPE_PRESCALER
-	brne ADSR_ACC
 	add r18, r17
-	brcc ADSR_ACC
+	brcc ADSR_EXIT
 	dec r20
 	std y+6, r20
 	lds r21, ENVELOPE_SUBSTAIN
 	cp r20, r21
 	breq NEXT_PHASE
-	rjmp ADSR_ACC
+	rjmp ADSR_EXIT
 DECAY_INSTANT:
 	lds r20, ENVELOPE_SUBSTAIN
 	std y+6, r20
 	rjmp NEXT_PHASE
 	
 SUBSTAIN:
-	rjmp ADSR_ACC
+	rjmp ADSR_EXIT
 	
 RELEASE:
 	lds r17, ENVELOPE_RELEASE ;step
 	tst r17
 	breq RELEASE_INSTANT
 	com r17
-	lds r21, ENVELOPE_TICK
-	cpi r21, ENVELOPE_PRESCALER
-	brne ADSR_ACC
 	add r18, r17
-	brcc ADSR_ACC
+	brcc ADSR_EXIT
 	dec r20
 	std y+6, r20
 	tst r20
-	breq NEXT_PHASE
-	rjmp ADSR_ACC
+	brne ADSR_EXIT
+	rcall CLEAR_OSCILLATORS
+	rjmp ADSR_EXIT
 RELEASE_INSTANT:
 	clr r20
 	std y+6, r20
-	rjmp NEXT_PHASE
+	rcall CLEAR_OSCILLATORS
+	rjmp ADSR_EXIT
 
 NEXT_PHASE:
 	inc r16
 	std y+4, r16
 	clr r18
-ADSR_ACC:
+ADSR_EXIT:
 	std y+5, r18
-	pop ZH
-	pop ZL
-	pop r21
 	ret
+
+
+
+
+
+
 
 WAVE:
 	push ZL
 	push ZH
-	lds r16, WAVEFORM
-	;lij WAVE_TABLE, r16
 
 	ldi ZL, low(WAVE_TABLE)
 	ldi ZH, high(WAVE_TABLE)
+	lds r16, WAVEFORM
 	addz r16
 	ijmp
 WAVE_TABLE:

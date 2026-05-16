@@ -1,13 +1,10 @@
-.org 0x0000
-    rjmp COLD
-.org 0x000E             ; Adressen för Timer 2 Compare Match A (ATmega328P)
-    rjmp UPDATE_OSCILLATORS
-
 .include "resources.asm"
+.include "interupts.asm"
 .include "hw.asm"
-.include "keys.asm"
 .include "sound_lib.asm"
 .include "sound.asm"
+.include "keys.asm"
+
 
 COLD:
 	ldi r16, LOW(RAMEND)
@@ -21,12 +18,27 @@ COLD:
 	rcall INITIALIZE_KEYS
 
 WARM:
-	note 330
-	note 440
+
 
 	sei
 
 MAIN:
-	;rcall CHECK_KEYS
-	rcall UPDATE_OSCILLATORS
+	lds r16, DEBOUNCE_FLAG
+	cpse r16, r2
+	rcall CHECK_KEYS
+	rcall LIGHT
+
 	rjmp MAIN
+
+LIGHT:
+	lds r16, KEYS_PRESSED
+	tst r16
+	breq TURN_OFF
+	
+TURN_ON:
+	sbi PORTD, 2
+	ret
+
+TURN_OFF:
+	cbi PORTD, 2
+	ret

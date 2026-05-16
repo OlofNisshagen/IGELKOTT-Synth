@@ -1,8 +1,8 @@
 .equ F_ISR = 62500
 .equ ACC_MAX = 65536
 
-.equ OSCILLATOR_SIZE = 8
-.equ VOICES_AMOUNT = 4
+.equ OSCILLATOR_SIZE = 9
+.equ VOICES_AMOUNT = 1
 
 .equ ENVELOPE_PRESCALER = 8
 
@@ -32,14 +32,16 @@
 INITIALIZE_VALUES:
 	sti MASTER_VOLUME, 255
 	sti WAVEFORM, 1
-	sti ENVELOPE_ATTACK, 230
-	sti ENVELOPE_DECAY, 230
-	sti ENVELOPE_SUBSTAIN, 128
-	sti ENVELOPE_RELEASE, 128
+	sti ENVELOPE_ATTACK, 245
+	sti ENVELOPE_DECAY, 245
+	sti ENVELOPE_SUBSTAIN, 200
+	sti ENVELOPE_RELEASE, 252
 	ret
 
 CLEAR_OSCILLATORS:
 	push r16
+	push YL
+	push YH
 	loady OSCILLATOR_0
 	ldi r16, VOICES_AMOUNT
 CLEAR_OSCILLATORS_LOOP:
@@ -48,6 +50,8 @@ CLEAR_OSCILLATORS_LOOP:
 	dec r16
 	brne CLEAR_OSCILLATORS_LOOP
 	sts OSCILLATORS_ACTIVE, r2
+	pop YH
+	pop YL
 	pop r16
 	ret
 
@@ -59,6 +63,8 @@ CLEAR_OSCILLATOR:
 	std y+4, r2
 	std y+5, r2
 	std y+6, r2
+	std y+7, r2
+	std y+8, r2
 	ret
 
 FIND_OSCILLATOR:
@@ -70,7 +76,39 @@ FIND_OSCILLATOR_LOOP:
 	lsr r18
 	dec r19
 	brne FIND_OSCILLATOR_LOOP
-FIND_OSCILLATOR_EXIT:
+VOICE_STEALING:
+	push YL
+	push YH
+	loady OSCILLATOR_0
+	addiy 8
+
+	clr r19		;vilken oscillator som levt längst
+	clr r20		;hur längre den längsta oscillatorn levt
+	clr r21		;current oscillator
+
+	ldi r18, VOICES_AMOUNT ;looplängd
+VOICE_STEALING_LOOP:
+	ld r21, Y
+	cp r21, r20
+	brlo VOICE_STEALING_CONT
+	mov r20, r21
+
+	ldi r21, VOICES_AMOUNT
+	sub r21, r18
+	mov r19, r21
+VOICE_STEALING_CONT:
+	addiy OSCILLATOR_SIZE
+	dec r18
+	brne VOICE_STEALING_LOOP
+VOICE_STEALING_EXIT:
+	ldi r20, OSCILLATOR_SIZE
+	mul r19, r20
+	loadx OSCILLATOR_0
+	addx r0
+	rcall ADD_TO_OSCILLATOR
+	rcall INCREMENT_OSCILLATORS_DURATION
+	pop YH
+	pop YL
 	ret
 
 FOUND:
@@ -81,8 +119,9 @@ FOUND:
 	loadx OSCILLATOR_0
 	addx r0
 	rcall ADD_TO_OSCILLATOR
+	rcall INCREMENT_OSCILLATORS_DURATION
 	rcall ACTIVATE_OSCILLATOR
-	rjmp FIND_OSCILLATOR_EXIT
+	ret
 
 ADD_TO_OSCILLATOR:
 	st X+, r16	;Step low
@@ -93,7 +132,26 @@ ADD_TO_OSCILLATOR:
 	st X+, r2	;Phase Acc
 	st X+, r2	;Envelope Level
 	st X+, r2	;Key Index
+	st X+, r2	;Duration
 	ret
+
+INCREMENT_OSCILLATORS_DURATION:
+	loady OSCILLATOR_0
+	addiy 8
+	ldi r18, VOICES_AMOUNT
+INCREMENT_OSCILLATORS_LOOP:
+	ld r16, y
+	inc r16
+	std y+8, r16
+	addiy OSCILLATOR_SIZE
+	dec r18
+	brne INCREMENT_OSCILLATORS_LOOP
+INCREMENT_OSCILLATORS_EXIT:
+	ret
+
+
+
+	
 
 ACTIVATE_OSCILLATOR:
 	push r18

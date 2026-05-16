@@ -83,6 +83,9 @@
     <Compile Include="HW.asm">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="interupts.asm">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="keys.asm">
       <SubType>Code</SubType>
     </Compile>

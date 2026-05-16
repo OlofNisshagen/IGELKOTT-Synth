@@ -1,30 +1,65 @@
-.equ KEYS_AMOUNT = 25
+.equ DEBOUNCE_DELAY = 255
 
 .dseg
-	KEYS_PRESSED:		.byte	4
+	KEYS_PRESSED:	.byte	1
+	DEBOUNCE_FLAG:	.byte	1
+	KEYS_STATE:		.byte	1
 
 .cseg
 
 INITIALIZE_KEYS:
-	loadx KEYS_PRESSED
-	st X+, r2
-	st X+, r2
-	st X+, r2
-	st X+, r2
+	sts KEYS_PRESSED, r2
+	sts DEBOUNCE_FLAG, r2
+	sts KEYS_STATE, r2
 	ret
 
 CHECK_KEYS:
-	;Se ifall det är skillnad, en key har tryckts ned elle rlyfts. 
-	;Debounce
-	;Ifall den har tryckts ned, hitta en ny oscillator för den
-	;Ifall den har lyfts, hitta rätt oscillator och sätt dess phasestate till release
+	push r16
+	lds r16, KEYS_PRESSED
+	tst r16
+	breq NOT_PRESSED
+	brne PRESSED_KEY
 
+NOT_PRESSED:
+	sbis PIND, 7
+	rjmp UPDATE_DEBOUNCE_TIMER
+	rjmp CLEAR_DEBOUNCE_TIMER
+	
+PRESSED_KEY:
+	sbic PIND, 7
+	rjmp UPDATE_DEBOUNCE_TIMER
+	rjmp CLEAR_DEBOUNCE_TIMER
 
+UPDATE_DEBOUNCE_TIMER:
+	lds r16, KEYS_STATE
+	inc r16
+	sts KEYS_STATE, r16
 
+	cpi r16, DEBOUNCE_DELAY
+	brne CHECK_KEYS_EXIT
+
+CHANGE_KEY_PRESSED:
+	lds r16, KEYS_PRESSED
+	com r16
+	sts KEYS_PRESSED, r16
+	rcall ADD_NOTE_MAYBE
+
+CLEAR_DEBOUNCE_TIMER:
+	clr r16
+	sts KEYS_STATE, r16
+	rjmp CHECK_KEYS_EXIT
+	
+CHECK_KEYS_EXIT:
+	sts DEBOUNCE_DELAY, r2
+	pop r16
 	ret
 
-CHECK_BUTTONS:
+ADD_NOTE_MAYBE:
+	lds r16, KEYS_PRESSED
+	tst r16
+	brne CONTINUE
 	ret
 
-UPDATE_KNOBS:
+CONTINUE:
+	note 440
 	ret

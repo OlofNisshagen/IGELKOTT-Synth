@@ -80,9 +80,6 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="HW.asm">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="interupts.asm">
       <SubType>Code</SubType>
     </Compile>

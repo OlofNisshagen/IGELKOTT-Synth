@@ -12,15 +12,22 @@ COLD:
 	ldi r16, HIGH(RAMEND)
 	out SPH, r16
 
-	rcall HW
+	rcall INITIALIZE_HARDWARE
+	rcall INITIALIZE_INTERUPTS
 	rcall CLEAR_OSCILLATORS
 	rcall INITIALIZE_VALUES
 	rcall INITIALIZE_KEYS
-
-WARM:
-
-
 	sei
+	rjmp MAIN
+
+INITIALIZE_HARDWARE:
+	sbi DDRB, 1
+	ldi r16, 0b00000100
+	out DDRD, r16
+	ldi r16, 0b11111000
+	out PORTD, r16
+	clr r2
+	ret
 
 MAIN:
 	lds r16, DEBOUNCE_FLAG

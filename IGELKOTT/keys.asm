@@ -62,4 +62,5 @@ ADD_NOTE_MAYBE:
 
 CONTINUE:
 	note 440
+	note 660
 	ret

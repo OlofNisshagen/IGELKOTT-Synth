@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm Sat May 16 13:35:45 2026
+AVRASM ver. 2.2.8  C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm Sun May 17 08:50:05 2026
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(1): Including file 'C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\resources.asm'
@@ -1047,76 +1047,73 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(6): Inc
                                  	ldi r16, @1
                                  	sts @0, r16
                                  	pop r16
+                                 .endmacro
+                                 
                                  .include "interupts.asm"
                                  
-000000 c255                          rjmp COLD
+000000 c259                          rjmp COLD
                                  .org 0x000E             ; Adressen för Timer 2 Compare Match A (ATmega328P)
-00000e c000                          rjmp TIMER_2
+00000e c01b                          rjmp TIMER_2
+                                 
+                                 INITIALIZE_INTERUPTS:
+                                 ;TIMER1
+00000f e801                      	ldi r16, (1<<COM1A1) | (1<<WGM10)
+000010 9300 0080                 	sts TCCR1A, r16
+000012 e009                      	ldi r16, (1<<WGM12) | (1<<CS10)
+000013 9300 0081                 	sts TCCR1B, r16
+                                    
+                                 ;TIMER2
+000015 930f
+000016 e002
+000017 9300 00b0
+000019 910f                      	sti TCCR2A, 1<<WGM21
+00001a 930f
+00001b e002
+00001c 9300 00b1
+00001e 910f                      	sti TCCR2B, 1<<CS21
+                                 
+00001f 930f
+000020 e10f
+000021 9300 00b3
+000023 910f                          sti OCR2A, 31
+000024 930f
+000025 e002
+000026 9300 0070
+000028 910f                      	sti TIMSK2, 1<<OCIE2A
+000029 9508                      	ret
                                  
                                  TIMER_2:
-00000f 930f                      	push r16
-000010 b70f                          in r16, SREG
-000011 930f                          push r16
+00002a 930f                      	push r16
+00002b b70f                          in r16, SREG
+00002c 930f                          push r16
                                  
-000012 d14e                      	rcall UPDATE_OSCILLATORS
-000013 930f
-000014 ef0f
-000015 9300 012d
-000017 910f                      	sti DEBOUNCE_FLAG, $FF
+00002d d134                      	rcall UPDATE_OSCILLATORS
+00002e 930f
+00002f ef0f
+000030 9300 012d
+000032 910f                      	sti DEBOUNCE_FLAG, $FF
                                  
-000018 910f                      	pop r16
-000019 bf0f                          out SREG, r16
-00001a 910f                          pop r16
+000033 910f                      	pop r16
+000034 bf0f                          out SREG, r16
+000035 910f                          pop r16
                                  .include "hw.asm"
-00001b 9518                      
-00001c 9a21                      	sbi DDRB, 1
+000036 9518                      
+000037 9a21                      	sbi DDRB, 1
                                  
-00001d e004                      	ldi r16, 0b00000100
-00001e b90a                      	out DDRD, r16
+000038 e004                      	ldi r16, 0b00000100
+000039 b90a                      	out DDRD, r16
                                  
-00001f ef08                      	ldi r16, 0b11111000
-000020 b90b                      	out PORTD, r16
-                                     
-                                     ; Timer 1
-000021 e801                      	ldi r16, (1<<COM1A1) | (1<<WGM10)
-000022 9300 0080                 	sts TCCR1A, r16
-000024 e009                      	ldi r16, (1<<WGM12) | (1<<CS10)
-000025 9300 0081                 	sts TCCR1B, r16
-                                    
-                                     ;Timer 2
-                                 	;ldi r16, (1<<WGM21)
-                                 	;sts TCCR2A, r16
-                                 	;ldi r16, (1<<CS21)
-                                 	;sts TCCR2B, r16
+00003a ef08                      	ldi r16, 0b11111000
+00003b b90b                      	out PORTD, r16
                                  
-000027 930f
-000028 e002
-000029 9300 00b0
-00002b 910f                      	sti TCCR2A, 1<<WGM21
-00002c 930f
-00002d e002
-00002e 9300 00b1
-000030 910f                      	sti TCCR2B, 1<<CS21
-                                 
-                                 	
-000031 930f
-000032 e10f
-000033 9300 00b3
-000035 910f                          sti OCR2A, 31
-                                     
-000036 930f
-000037 e002
-000038 9300 0070
-00003a 910f                      	sti TIMSK2, 1<<OCIE2A
-                                 
-00003b 2422                      	clr r2
+00003c 2422                      	clr r2
                                  
                                  .include "sound_lib.asm"
-00003c 9508                      
+00003d 9508                      
                                  .equ ACC_MAX = 65536
                                  
                                  .equ OSCILLATOR_SIZE = 9
-                                 .equ VOICES_AMOUNT = 1
+                                 .equ VOICES_AMOUNT = 2
                                  
                                  .equ ENVELOPE_PRESCALER = 8
                                  
@@ -1144,509 +1141,509 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(6): Inc
                                  
                                  .cseg
                                  INITIALIZE_VALUES:
-00003d 930f
-00003e ef0f
-00003f 9300 0100
-000041 910f                      	sti MASTER_VOLUME, 255
-000042 930f
-000043 e001
-000044 9300 0101
-000046 910f                      	sti WAVEFORM, 1
-000047 930f
-000048 ef05
-000049 9300 0103
-00004b 910f                      	sti ENVELOPE_ATTACK, 245
-00004c 930f
-00004d ef05
-00004e 9300 0104
-000050 910f                      	sti ENVELOPE_DECAY, 245
-000051 930f
-000052 ec08
-000053 9300 0105
-000055 910f                      	sti ENVELOPE_SUBSTAIN, 200
-000056 930f
-000057 ef0c
-000058 9300 0106
-00005a 910f                      	sti ENVELOPE_RELEASE, 252
-00005b 9508                      	ret
+00003e 930f
+00003f ef0f
+000040 9300 0100
+000042 910f                      	sti MASTER_VOLUME, 255
+000043 930f
+000044 e002
+000045 9300 0101
+000047 910f                      	sti WAVEFORM, 2
+000048 930f
+000049 e604
+00004a 9300 0103
+00004c 910f                      	sti ENVELOPE_ATTACK, 100
+00004d 930f
+00004e e604
+00004f 9300 0104
+000051 910f                      	sti ENVELOPE_DECAY, 100
+000052 930f
+000053 e800
+000054 9300 0105
+000056 910f                      	sti ENVELOPE_SUBSTAIN, 128
+000057 930f
+000058 ec08
+000059 9300 0106
+00005b 910f                      	sti ENVELOPE_RELEASE, 200
+00005c 9508                      	ret
                                  
                                  CLEAR_OSCILLATORS:
-00005c 930f                      	push r16
-00005d 93cf                      	push YL
-00005e 93df                      	push YH
-00005f e0c8
-000060 e0d1                      	loady OSCILLATOR_0
-000061 e001                      	ldi r16, VOICES_AMOUNT
+00005d 930f                      	push r16
+00005e 93cf                      	push YL
+00005f 93df                      	push YH
+000060 e0c8
+000061 e0d1                      	loady OSCILLATOR_0
+000062 e002                      	ldi r16, VOICES_AMOUNT
                                  CLEAR_OSCILLATORS_LOOP:
-000062 d00a                      	rcall CLEAR_OSCILLATOR
-000063 5fc7
-000064 1dd2                      	addiy OSCILLATOR_SIZE
-000065 950a                      	dec r16
-000066 f7d9                      	brne CLEAR_OSCILLATORS_LOOP
-000067 9220 0107                 	sts OSCILLATORS_ACTIVE, r2
-000069 91df                      	pop YH
-00006a 91cf                      	pop YL
-00006b 910f                      	pop r16
-00006c 9508                      	ret
+000063 d00a                      	rcall CLEAR_OSCILLATOR
+000064 5fc7
+000065 1dd2                      	addiy OSCILLATOR_SIZE
+000066 950a                      	dec r16
+000067 f7d9                      	brne CLEAR_OSCILLATORS_LOOP
+000068 9220 0107                 	sts OSCILLATORS_ACTIVE, r2
+00006a 91df                      	pop YH
+00006b 91cf                      	pop YL
+00006c 910f                      	pop r16
+00006d 9508                      	ret
                                  
                                  CLEAR_OSCILLATOR:
-00006d 8228                      	std y+0, r2
-00006e 8229                      	std y+1, r2
-00006f 822a                      	std y+2, r2
-000070 822b                      	std y+3, r2
-000071 822c                      	std y+4, r2
-000072 822d                      	std y+5, r2
-000073 822e                      	std y+6, r2
-000074 822f                      	std y+7, r2
-000075 8628                      	std y+8, r2
-000076 9508                      	ret
+00006e 8228                      	std y+0, r2
+00006f 8229                      	std y+1, r2
+000070 822a                      	std y+2, r2
+000071 822b                      	std y+3, r2
+000072 822c                      	std y+4, r2
+000073 822d                      	std y+5, r2
+000074 822e                      	std y+6, r2
+000075 822f                      	std y+7, r2
+000076 8628                      	std y+8, r2
+000077 9508                      	ret
                                  
                                  FIND_OSCILLATOR:
-000077 9120 0107                 	lds r18, OSCILLATORS_ACTIVE
-000079 e031                      	ldi r19, VOICES_AMOUNT
+000078 9120 0107                 	lds r18, OSCILLATORS_ACTIVE
+00007a e032                      	ldi r19, VOICES_AMOUNT
                                  FIND_OSCILLATOR_LOOP:
-00007a ff20                      	sbrs r18, 0
-00007b c023                      	rjmp FOUND
-00007c 9526                      	lsr r18
-00007d 953a                      	dec r19
-00007e f7d9                      	brne FIND_OSCILLATOR_LOOP
+00007b ff20                      	sbrs r18, 0
+00007c c023                      	rjmp FOUND
+00007d 9526                      	lsr r18
+00007e 953a                      	dec r19
+00007f f7d9                      	brne FIND_OSCILLATOR_LOOP
                                  VOICE_STEALING:
-00007f 93cf                      	push YL
-000080 93df                      	push YH
-000081 e0c8
-000082 e0d1                      	loady OSCILLATOR_0
-000083 5fc8
-000084 1dd2                      	addiy 8
+000080 93cf                      	push YL
+000081 93df                      	push YH
+000082 e0c8
+000083 e0d1                      	loady OSCILLATOR_0
+000084 5fc8
+000085 1dd2                      	addiy 8
                                  
-000085 2733                      	clr r19		;vilken oscillator som levt längst
-000086 2744                      	clr r20		;hur längre den längsta oscillatorn levt
-000087 2755                      	clr r21		;current oscillator
+000086 2733                      	clr r19		;vilken oscillator som levt längst
+000087 2744                      	clr r20		;hur längre den längsta oscillatorn levt
+000088 2755                      	clr r21		;current oscillator
                                  
-000088 e021                      	ldi r18, VOICES_AMOUNT ;looplängd
+000089 e022                      	ldi r18, VOICES_AMOUNT ;looplängd
                                  VOICE_STEALING_LOOP:
-000089 8158                      	ld r21, Y
-00008a 1754                      	cp r21, r20
-00008b f020                      	brlo VOICE_STEALING_CONT
-00008c 2f45                      	mov r20, r21
+00008a 8158                      	ld r21, Y
+00008b 1754                      	cp r21, r20
+00008c f020                      	brlo VOICE_STEALING_CONT
+00008d 2f45                      	mov r20, r21
                                  
-00008d e051                      	ldi r21, VOICES_AMOUNT
-00008e 1b52                      	sub r21, r18
-00008f 2f35                      	mov r19, r21
+00008e e052                      	ldi r21, VOICES_AMOUNT
+00008f 1b52                      	sub r21, r18
+000090 2f35                      	mov r19, r21
                                  VOICE_STEALING_CONT:
-000090 5fc7
-000091 1dd2                      	addiy OSCILLATOR_SIZE
-000092 952a                      	dec r18
-000093 f7a9                      	brne VOICE_STEALING_LOOP
+000091 5fc7
+000092 1dd2                      	addiy OSCILLATOR_SIZE
+000093 952a                      	dec r18
+000094 f7a9                      	brne VOICE_STEALING_LOOP
                                  VOICE_STEALING_EXIT:
-000094 e049                      	ldi r20, OSCILLATOR_SIZE
-000095 9f34                      	mul r19, r20
-000096 e0a8
-000097 e0b1                      	loadx OSCILLATOR_0
-000098 0da0
-000099 1db2                      	addx r0
-00009a d010                      	rcall ADD_TO_OSCILLATOR
-00009b d019                      	rcall INCREMENT_OSCILLATORS_DURATION
-00009c 91df                      	pop YH
-00009d 91cf                      	pop YL
-00009e 9508                      	ret
+000095 e049                      	ldi r20, OSCILLATOR_SIZE
+000096 9f34                      	mul r19, r20
+000097 e0a8
+000098 e0b1                      	loadx OSCILLATOR_0
+000099 0da0
+00009a 1db2                      	addx r0
+00009b d010                      	rcall ADD_TO_OSCILLATOR
+00009c d019                      	rcall INCREMENT_OSCILLATORS_DURATION
+00009d 91df                      	pop YH
+00009e 91cf                      	pop YL
+00009f 9508                      	ret
                                  
                                  FOUND:
-00009f e021                      	ldi r18, VOICES_AMOUNT
-0000a0 1b23                      	sub r18, r19
-0000a1 e049                      	ldi r20, OSCILLATOR_SIZE
-0000a2 9f24                      	mul r18, r20
-0000a3 e0a8
-0000a4 e0b1                      	loadx OSCILLATOR_0
-0000a5 0da0
-0000a6 1db2                      	addx r0
-0000a7 d003                      	rcall ADD_TO_OSCILLATOR
-0000a8 d00c                      	rcall INCREMENT_OSCILLATORS_DURATION
-0000a9 d018                      	rcall ACTIVATE_OSCILLATOR
-0000aa 9508                      	ret
+0000a0 e022                      	ldi r18, VOICES_AMOUNT
+0000a1 1b23                      	sub r18, r19
+0000a2 e049                      	ldi r20, OSCILLATOR_SIZE
+0000a3 9f24                      	mul r18, r20
+0000a4 e0a8
+0000a5 e0b1                      	loadx OSCILLATOR_0
+0000a6 0da0
+0000a7 1db2                      	addx r0
+0000a8 d003                      	rcall ADD_TO_OSCILLATOR
+0000a9 d00c                      	rcall INCREMENT_OSCILLATORS_DURATION
+0000aa d018                      	rcall ACTIVATE_OSCILLATOR
+0000ab 9508                      	ret
                                  
                                  ADD_TO_OSCILLATOR:
-0000ab 930d                      	st X+, r16	;Step low
-0000ac 931d                      	st X+, r17	;Step high
-0000ad 922d                      	st X+, r2	;Acc low
-0000ae 922d                      	st X+, r2	;Acc high
-0000af 922d                      	st X+, r2	;Phase State
-0000b0 922d                      	st X+, r2	;Phase Acc
-0000b1 922d                      	st X+, r2	;Envelope Level
-0000b2 922d                      	st X+, r2	;Key Index
-0000b3 922d                      	st X+, r2	;Duration
-0000b4 9508                      	ret
+0000ac 930d                      	st X+, r16	;Step low
+0000ad 931d                      	st X+, r17	;Step high
+0000ae 922d                      	st X+, r2	;Acc low
+0000af 922d                      	st X+, r2	;Acc high
+0000b0 922d                      	st X+, r2	;Phase State
+0000b1 922d                      	st X+, r2	;Phase Acc
+0000b2 922d                      	st X+, r2	;Envelope Level
+0000b3 922d                      	st X+, r2	;Key Index
+0000b4 922d                      	st X+, r2	;Duration
+0000b5 9508                      	ret
                                  
                                  INCREMENT_OSCILLATORS_DURATION:
-0000b5 e0c8
-0000b6 e0d1                      	loady OSCILLATOR_0
-0000b7 5fc8
-0000b8 1dd2                      	addiy 8
-0000b9 e021                      	ldi r18, VOICES_AMOUNT
+0000b6 e0c8
+0000b7 e0d1                      	loady OSCILLATOR_0
+0000b8 5fc8
+0000b9 1dd2                      	addiy 8
+0000ba e022                      	ldi r18, VOICES_AMOUNT
                                  INCREMENT_OSCILLATORS_LOOP:
-0000ba 8108                      	ld r16, y
-0000bb 9503                      	inc r16
-0000bc 8708                      	std y+8, r16
-0000bd 5fc7
-0000be 1dd2                      	addiy OSCILLATOR_SIZE
-0000bf 952a                      	dec r18
-0000c0 f7c9                      	brne INCREMENT_OSCILLATORS_LOOP
+0000bb 8108                      	ld r16, y
+0000bc 9503                      	inc r16
+0000bd 8708                      	std y+8, r16
+0000be 5fc7
+0000bf 1dd2                      	addiy OSCILLATOR_SIZE
+0000c0 952a                      	dec r18
+0000c1 f7c9                      	brne INCREMENT_OSCILLATORS_LOOP
                                  INCREMENT_OSCILLATORS_EXIT:
-0000c1 9508                      	ret
+0000c2 9508                      	ret
                                  
                                  ACTIVATE_OSCILLATOR:
-0000c2 932f                      	push r18
-0000c3 9100 0107                 	lds r16, OSCILLATORS_ACTIVE
-0000c5 e011                      	ldi r17, 1
-0000c6 2322                      	tst r18
-0000c7 f019                      	breq ACTIVATE_OSCILLATOR_EXIT
+0000c3 932f                      	push r18
+0000c4 9100 0107                 	lds r16, OSCILLATORS_ACTIVE
+0000c6 e011                      	ldi r17, 1
+0000c7 2322                      	tst r18
+0000c8 f019                      	breq ACTIVATE_OSCILLATOR_EXIT
                                  ACTIVATE_OSCILLATOR_LOOP:
-0000c8 0f11                      	lsl r17
-0000c9 952a                      	dec r18
-0000ca f7e9                      	brne ACTIVATE_OSCILLATOR_LOOP
+0000c9 0f11                      	lsl r17
+0000ca 952a                      	dec r18
+0000cb f7e9                      	brne ACTIVATE_OSCILLATOR_LOOP
                                  ACTIVATE_OSCILLATOR_EXIT:
-0000cb 2b01                      	or r16, r17
-0000cc 9300 0107                 	sts OSCILLATORS_ACTIVE, r16
-0000ce 912f                      	pop r18
-0000cf 9508                      	ret
+0000cc 2b01                      	or r16, r17
+0000cd 9300 0107                 	sts OSCILLATORS_ACTIVE, r16
+0000cf 912f                      	pop r18
+0000d0 9508                      	ret
                                  
                                  DEACTIVATE_OSCILLATOR:
-0000d0 932f                      	push r18
-0000d1 9100 0107                 	lds r16, OSCILLATORS_ACTIVE
-0000d3 e011                      	ldi r17, 1
-0000d4 2322                      	tst r18
-0000d5 f019                      	breq DEACTIVATE_OSCILLATOR_EXIT
+0000d1 932f                      	push r18
+0000d2 9100 0107                 	lds r16, OSCILLATORS_ACTIVE
+0000d4 e011                      	ldi r17, 1
+0000d5 2322                      	tst r18
+0000d6 f019                      	breq DEACTIVATE_OSCILLATOR_EXIT
                                  DEACTIVATE_OSCILLATOR_LOOP:
-0000d6 0f11                      	lsl r17
-0000d7 952a                      	dec r18
-0000d8 f7e9                      	brne DEACTIVATE_OSCILLATOR_LOOP
+0000d7 0f11                      	lsl r17
+0000d8 952a                      	dec r18
+0000d9 f7e9                      	brne DEACTIVATE_OSCILLATOR_LOOP
                                  DEACTIVATE_OSCILLATOR_EXIT:
-0000d9 2301                      	and r16, r17
-0000da 9300 0107                 	sts OSCILLATORS_ACTIVE, r16
-0000dc 912f                      	pop r18
-0000dd 9508                      	ret
+0000da 2301                      	and r16, r17
+0000db 9300 0107                 	sts OSCILLATORS_ACTIVE, r16
+0000dd 912f                      	pop r18
+0000de 9508                      	ret
                                  
                                  SINE_TABLE:
-0000de 8380
-0000df 8986
-0000e0 8f8c
-0000e1 9592
-0000e2 9c98
-0000e3 a29f
-0000e4 a8a5
-0000e5 aeab                      	.db 128, 131, 134, 137, 140, 143, 146, 149, 152, 156, 159, 162, 165, 168, 171, 174
-0000e6 b3b1
-0000e7 b9b6
-0000e8 bfbc
-0000e9 c4c1
-0000ea c9c7
-0000eb cecc
-0000ec d3d1
-0000ed d8d5                      	.db 177, 179, 182, 185, 188, 191, 193, 196, 199, 201, 204, 206, 209, 211, 213, 216
-0000ee dcda
-0000ef e0de
-0000f0 e4e2
-0000f1 e8e6
-0000f2 ecea
-0000f3 efed
-0000f4 f2f0
-0000f5 f5f3                      	.db 218, 220, 222, 224, 226, 228, 230, 232, 234, 236, 237, 239, 240, 242, 243, 245
-0000f6 f7f6
-0000f7 f9f8
-0000f8 fbfa
-0000f9 fcfc
-0000fa fefd
-0000fb fffe
-0000fc ffff
-0000fd ffff                      	.db 246, 247, 248, 249, 250, 251, 252, 252, 253, 254, 254, 255, 255, 255, 255, 255
-0000fe ffff
+0000df 8380
+0000e0 8986
+0000e1 8f8c
+0000e2 9592
+0000e3 9c98
+0000e4 a29f
+0000e5 a8a5
+0000e6 aeab                      	.db 128, 131, 134, 137, 140, 143, 146, 149, 152, 156, 159, 162, 165, 168, 171, 174
+0000e7 b3b1
+0000e8 b9b6
+0000e9 bfbc
+0000ea c4c1
+0000eb c9c7
+0000ec cecc
+0000ed d3d1
+0000ee d8d5                      	.db 177, 179, 182, 185, 188, 191, 193, 196, 199, 201, 204, 206, 209, 211, 213, 216
+0000ef dcda
+0000f0 e0de
+0000f1 e4e2
+0000f2 e8e6
+0000f3 ecea
+0000f4 efed
+0000f5 f2f0
+0000f6 f5f3                      	.db 218, 220, 222, 224, 226, 228, 230, 232, 234, 236, 237, 239, 240, 242, 243, 245
+0000f7 f7f6
+0000f8 f9f8
+0000f9 fbfa
+0000fa fcfc
+0000fb fefd
+0000fc fffe
+0000fd ffff
+0000fe ffff                      	.db 246, 247, 248, 249, 250, 251, 252, 252, 253, 254, 254, 255, 255, 255, 255, 255
 0000ff ffff
 000100 ffff
-000101 fefe
-000102 fcfd
-000103 fbfc
-000104 f9fa
-000105 f7f8                      	.db 255, 255, 255, 255, 255, 255, 254, 254, 253, 252, 252, 251, 250, 249, 248, 247
-000106 f5f6
-000107 f2f3
-000108 eff0
-000109 eced
-00010a e8ea
-00010b e4e6
-00010c e0e2
-00010d dcde                      	.db 246, 245, 243, 242, 240, 239, 237, 236, 234, 232, 230, 228, 226, 224, 222, 220
-00010e d8da
-00010f d3d5
-000110 ced1
-000111 c9cc
-000112 c4c7
-000113 bfc1
-000114 b9bc
-000115 b3b6                      	.db 218, 216, 213, 211, 209, 206, 204, 201, 199, 196, 193, 191, 188, 185, 182, 179
-000116 aeb1
-000117 a8ab
-000118 a2a5
-000119 9c9f
-00011a 9598
-00011b 8f92
-00011c 898c
-00011d 8386                      	.db 177, 174, 171, 168, 165, 162, 159, 156, 152, 149, 146, 143, 140, 137, 134, 131
-00011e 7c80
-00011f 7679
-000120 7073
-000121 6a6d
-000122 6367
-000123 5d60
-000124 575a
-000125 5154                      	.db 128, 124, 121, 118, 115, 112, 109, 106, 103,  99,  96,  93,  90,  87,  84,  81
-000126 4c4e
-000127 4649
-000128 4043
-000129 3b3e
-00012a 3638
-00012b 3133
-00012c 2c2e
-00012d 272a                      	.db  78,  76,  73,  70,  67,  64,  62,  59,  56,  54,  51,  49,  46,  44,  42,  39
-00012e 2325
-00012f 1f21
-000130 1b1d
-000131 1719
-000132 1315
-000133 1012
-000134 0d0f
-000135 0a0c                      	.db  37,  35,  33,  31,  29,  27,  25,  23,  21,  19,  18,  16,  15,  13,  12,  10
-000136 0809
-000137 0607
-000138 0405
-000139 0303
-00013a 0102
-00013b 0001
-00013c 0000
-00013d 0000                      	.db   9,   8,   7,   6,   5,   4,   3,   3,   2,   1,   1,   0,   0,   0,   0,   0
-00013e 0000
+000101 ffff
+000102 fefe
+000103 fcfd
+000104 fbfc
+000105 f9fa
+000106 f7f8                      	.db 255, 255, 255, 255, 255, 255, 254, 254, 253, 252, 252, 251, 250, 249, 248, 247
+000107 f5f6
+000108 f2f3
+000109 eff0
+00010a eced
+00010b e8ea
+00010c e4e6
+00010d e0e2
+00010e dcde                      	.db 246, 245, 243, 242, 240, 239, 237, 236, 234, 232, 230, 228, 226, 224, 222, 220
+00010f d8da
+000110 d3d5
+000111 ced1
+000112 c9cc
+000113 c4c7
+000114 bfc1
+000115 b9bc
+000116 b3b6                      	.db 218, 216, 213, 211, 209, 206, 204, 201, 199, 196, 193, 191, 188, 185, 182, 179
+000117 aeb1
+000118 a8ab
+000119 a2a5
+00011a 9c9f
+00011b 9598
+00011c 8f92
+00011d 898c
+00011e 8386                      	.db 177, 174, 171, 168, 165, 162, 159, 156, 152, 149, 146, 143, 140, 137, 134, 131
+00011f 7c80
+000120 7679
+000121 7073
+000122 6a6d
+000123 6367
+000124 5d60
+000125 575a
+000126 5154                      	.db 128, 124, 121, 118, 115, 112, 109, 106, 103,  99,  96,  93,  90,  87,  84,  81
+000127 4c4e
+000128 4649
+000129 4043
+00012a 3b3e
+00012b 3638
+00012c 3133
+00012d 2c2e
+00012e 272a                      	.db  78,  76,  73,  70,  67,  64,  62,  59,  56,  54,  51,  49,  46,  44,  42,  39
+00012f 2325
+000130 1f21
+000131 1b1d
+000132 1719
+000133 1315
+000134 1012
+000135 0d0f
+000136 0a0c                      	.db  37,  35,  33,  31,  29,  27,  25,  23,  21,  19,  18,  16,  15,  13,  12,  10
+000137 0809
+000138 0607
+000139 0405
+00013a 0303
+00013b 0102
+00013c 0001
+00013d 0000
+00013e 0000                      	.db   9,   8,   7,   6,   5,   4,   3,   3,   2,   1,   1,   0,   0,   0,   0,   0
 00013f 0000
 000140 0000
-000141 0101
-000142 0302
-000143 0403
-000144 0605
-000145 0807                      	.db   0,   0,   0,   0,   0,   0,   1,   1,   2,   3,   3,   4,   5,   6,   7,   8
-000146 0a09
-000147 0d0c
-000148 100f
-000149 1312
-00014a 1715
-00014b 1b19
-00014c 1f1d
-00014d 2321                      	.db   9,  10,  12,  13,  15,  16,  18,  19,  21,  23,  25,  27,  29,  31,  33,  35
-00014e 2725
-00014f 2c2a
-000150 312e
-000151 3633
-000152 3b38
-000153 403e
-000154 4643
-000155 4c49                      	.db  37,  39,  42,  44,  46,  49,  51,  54,  56,  59,  62,  64,  67,  70,  73,  76
-000156 514e
-000157 5754
-000158 5d5a
-000159 6360
-00015a 6a67
-00015b 706d
-00015c 7673
-00015d 7c79                      	.db  78,  81,  84,  87,  90,  93,  96,  99, 103, 106, 109, 112, 115, 118, 121, 124
+000141 0000
+000142 0101
+000143 0302
+000144 0403
+000145 0605
+000146 0807                      	.db   0,   0,   0,   0,   0,   0,   1,   1,   2,   3,   3,   4,   5,   6,   7,   8
+000147 0a09
+000148 0d0c
+000149 100f
+00014a 1312
+00014b 1715
+00014c 1b19
+00014d 1f1d
+00014e 2321                      	.db   9,  10,  12,  13,  15,  16,  18,  19,  21,  23,  25,  27,  29,  31,  33,  35
+00014f 2725
+000150 2c2a
+000151 312e
+000152 3633
+000153 3b38
+000154 403e
+000155 4643
+000156 4c49                      	.db  37,  39,  42,  44,  46,  49,  51,  54,  56,  59,  62,  64,  67,  70,  73,  76
+000157 514e
+000158 5754
+000159 5d5a
+00015a 6360
+00015b 6a67
+00015c 706d
+00015d 7673
+00015e 7c79                      	.db  78,  81,  84,  87,  90,  93,  96,  99, 103, 106, 109, 112, 115, 118, 121, 124
                                  
                                  NOTES:
-00015e 2606                      .include "sound.asm"
-00015f 884a
+00015f 2606                      .include "sound.asm"
+000160 884a
 C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm(1): warning: .cseg .db misalignment - padding zero byte
 C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(5): 'C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm' included form here
-000160 00b8                      
-000161 937f                      	push r23
+000161 00b8                      
+000162 937f                      	push r23
                                  
-000162 2777                      	clr r23
+000163 2777                      	clr r23
                                  
-000163 d005                      	rcall UPDATE_ENVELOPE_TICK
-000164 d010                      	rcall OUTPUT_AUDIO
+000164 d005                      	rcall UPDATE_ENVELOPE_TICK
+000165 d010                      	rcall OUTPUT_AUDIO
                                  
-000165 9370 0088                 	sts OCR1AL, r23
+000166 9370 0088                 	sts OCR1AL, r23
                                  	
-000167 917f                      	pop r23
-000168 9508                      	ret
+000168 917f                      	pop r23
+000169 9508                      	ret
                                  
                                  UPDATE_ENVELOPE_TICK:
-000169 9100 0102                 	lds r16, ENVELOPE_TICK
-00016b 950a                      	dec r16
-00016c 9300 0102                 	sts ENVELOPE_TICK, r16
-00016e f429                      	brne UPDATE_TICK_EXIT
-00016f 930f
-000170 e008
-000171 9300 0102
-000173 910f                      	sti ENVELOPE_TICK, ENVELOPE_PRESCALER
+00016a 9100 0102                 	lds r16, ENVELOPE_TICK
+00016c 950a                      	dec r16
+00016d 9300 0102                 	sts ENVELOPE_TICK, r16
+00016f f429                      	brne UPDATE_TICK_EXIT
+000170 930f
+000171 e008
+000172 9300 0102
+000174 910f                      	sti ENVELOPE_TICK, ENVELOPE_PRESCALER
                                  UPDATE_TICK_EXIT:
-000174 9508                      	ret
+000175 9508                      	ret
                                  
                                  OUTPUT_AUDIO:
-000175 93cf                      	push YL
-000176 93df                      	push YH
-000177 930f                      	push r16
-000178 932f                      	push r18
+000176 93cf                      	push YL
+000177 93df                      	push YH
+000178 930f                      	push r16
+000179 932f                      	push r18
                                  
-000179 e0c8
-00017a e0d1                      	loady OSCILLATOR_0
-00017b e001                      	ldi r16, VOICES_AMOUNT
-00017c 9120 0107                 	lds r18, OSCILLATORS_ACTIVE
+00017a e0c8
+00017b e0d1                      	loady OSCILLATOR_0
+00017c e002                      	ldi r16, VOICES_AMOUNT
+00017d 9120 0107                 	lds r18, OSCILLATORS_ACTIVE
                                  
                                  OUTPUT_LOOP:
-00017e fd20                      	sbrc r18, 0
-00017f d00a                      	rcall PLAY_NOTE
-000180 5fc7
-000181 1dd2                      	addiy OSCILLATOR_SIZE
-000182 9526                      	lsr r18
-000183 950a                      	dec r16
-000184 f7c9                      	brne OUTPUT_LOOP
+00017f fd20                      	sbrc r18, 0
+000180 d00a                      	rcall PLAY_NOTE
+000181 5fc7
+000182 1dd2                      	addiy OSCILLATOR_SIZE
+000183 9526                      	lsr r18
+000184 950a                      	dec r16
+000185 f7c9                      	brne OUTPUT_LOOP
                                  	
-000185 912f                      	pop r18
-000186 910f                      	pop r16
-000187 91df                      	pop YH
-000188 91cf                      	pop YL
-000189 9508                      	ret
+000186 912f                      	pop r18
+000187 910f                      	pop r16
+000188 91df                      	pop YH
+000189 91cf                      	pop YL
+00018a 9508                      	ret
                                  
                                  PLAY_NOTE:
-00018a 930f                      	push r16
-00018b 931f                      	push r17
-00018c 932f                      	push r18
-00018d 933f                      	push r19
-00018e 934f                      	push r20
-00018f 935f                      	push r21
+00018b 930f                      	push r16
+00018c 931f                      	push r17
+00018d 932f                      	push r18
+00018e 933f                      	push r19
+00018f 934f                      	push r20
+000190 935f                      	push r21
                                  
-000190 d00f                      	rcall UPDATE_ACCUMULATOR
+000191 d00f                      	rcall UPDATE_ACCUMULATOR
                                  
-000191 d017                      	rcall ADSR
+000192 d017                      	rcall ADSR
                                  
-000192 9110 0100                 	lds r17, MASTER_VOLUME
-000194 9f14                      	mul r17, r20
-000195 2d11                      	mov r17, r1
-000196 9516                      	lsr r17
+000193 9110 0100                 	lds r17, MASTER_VOLUME
+000195 9f14                      	mul r17, r20
+000196 2d11                      	mov r17, r1
 000197 9516                      	lsr r17
+000198 9516                      	lsr r17
                                  
-000198 d062                      	rcall WAVE
+000199 d062                      	rcall WAVE
                                  
                                  PLAY_NOTE_EXIT:
-000199 915f                      	pop r21
-00019a 914f                      	pop r20
-00019b 913f                      	pop r19
-00019c 912f                      	pop r18
-00019d 911f                      	pop r17
-00019e 910f                      	pop r16
-00019f 9508                      	ret
+00019a 915f                      	pop r21
+00019b 914f                      	pop r20
+00019c 913f                      	pop r19
+00019d 912f                      	pop r18
+00019e 911f                      	pop r17
+00019f 910f                      	pop r16
+0001a0 9508                      	ret
                                  	
                                  UPDATE_ACCUMULATOR:
-0001a0 8108                      	ldd r16, y+0 ;step low
-0001a1 8119                          ldd r17, y+1 ;step high
-0001a2 812a                          ldd r18, y+2 ;acc low
-0001a3 813b                          ldd r19, y+3 ;acc high
-0001a4 0f20                          add r18, r16
-0001a5 1f31                          adc r19, r17
-0001a6 832a                      	std y+2, r18            
-0001a7 833b                          std y+3, r19
-0001a8 9508                      	ret
+0001a1 8108                      	ldd r16, y+0 ;step low
+0001a2 8119                          ldd r17, y+1 ;step high
+0001a3 812a                          ldd r18, y+2 ;acc low
+0001a4 813b                          ldd r19, y+3 ;acc high
+0001a5 0f20                          add r18, r16
+0001a6 1f31                          adc r19, r17
+0001a7 832a                      	std y+2, r18            
+0001a8 833b                          std y+3, r19
+0001a9 9508                      	ret
                                  
                                  ADSR:
-0001a9 810c                      	ldd r16, y+4
-0001aa 812d                      	ldd r18, y+5			 ;acc
-0001ab 814e                      	ldd r20, y+6			 ;envelope volume
+0001aa 810c                      	ldd r16, y+4
+0001ab 812d                      	ldd r18, y+5			 ;acc
+0001ac 814e                      	ldd r20, y+6			 ;envelope volume
                                  
-0001ac e018                      	ldi r17, ENVELOPE_PRESCALER
-0001ad 9150 0102                 	lds r21, ENVELOPE_TICK
-0001af 1351                      	cpse r21, r17
-0001b0 c048                      	rjmp ADSR_EXIT
+0001ad e018                      	ldi r17, ENVELOPE_PRESCALER
+0001ae 9150 0102                 	lds r21, ENVELOPE_TICK
+0001b0 1351                      	cpse r21, r17
+0001b1 c048                      	rjmp ADSR_EXIT
                                  
-0001b1 3003                      	cpi r16, 3 ;release
-0001b2 f590                      	brsh RELEASE
+0001b2 3003                      	cpi r16, 3 ;release
+0001b3 f590                      	brsh RELEASE
                                  
-0001b3 9150 012c                 	lds r21, KEYS_PRESSED
-0001b5 2355                      	tst r21
-0001b6 f039                      	breq SET_RELEASE
+0001b4 9150 012c                 	lds r21, KEYS_PRESSED
+0001b6 2355                      	tst r21
+0001b7 f039                      	breq SET_RELEASE
                                  
-0001b7 3000                      	cpi r16, 0 ;attack
-0001b8 f051                      	breq ATTACK
-0001b9 3001                      	cpi r16, 1 ;decay
-0001ba f0b9                      	breq DECAY
-0001bb 3002                      	cpi r16, 2 ;substain
-0001bc f139                      	breq SUBSTAIN
-0001bd c03b                      	rjmp ADSR_EXIT ;for safety
+0001b8 3000                      	cpi r16, 0 ;attack
+0001b9 f051                      	breq ATTACK
+0001ba 3001                      	cpi r16, 1 ;decay
+0001bb f0b9                      	breq DECAY
+0001bc 3002                      	cpi r16, 2 ;substain
+0001bd f139                      	breq SUBSTAIN
+0001be c03b                      	rjmp ADSR_EXIT ;for safety
                                  
                                  SET_RELEASE:
-0001be e003                      	ldi r16, 3
-0001bf 830c                      	std y+4, r16
-0001c0 2722                      	clr r18
-0001c1 832d                      	std y+5, r18
-0001c2 c022                      	rjmp RELEASE
+0001bf e003                      	ldi r16, 3
+0001c0 830c                      	std y+4, r16
+0001c1 2722                      	clr r18
+0001c2 832d                      	std y+5, r18
+0001c3 c022                      	rjmp RELEASE
                                  	
                                  ATTACK:
-0001c3 9110 0103                 	lds r17, ENVELOPE_ATTACK ;step
-0001c5 2311                      	tst r17
-0001c6 f041                      	breq ATTACK_INSTANT
-0001c7 9510                      	com r17
-0001c8 0f21                      	add r18, r17
-0001c9 f578                      	brcc ADSR_EXIT
-0001ca 9543                      	inc r20
-0001cb 834e                      	std y+6, r20
-0001cc 3f4f                      	cpi r20, $FF
-0001cd f141                      	breq NEXT_PHASE
-0001ce c02a                      	rjmp ADSR_EXIT
+0001c4 9110 0103                 	lds r17, ENVELOPE_ATTACK ;step
+0001c6 2311                      	tst r17
+0001c7 f041                      	breq ATTACK_INSTANT
+0001c8 9510                      	com r17
+0001c9 0f21                      	add r18, r17
+0001ca f578                      	brcc ADSR_EXIT
+0001cb 9543                      	inc r20
+0001cc 834e                      	std y+6, r20
+0001cd 3f4f                      	cpi r20, $FF
+0001ce f141                      	breq NEXT_PHASE
+0001cf c02a                      	rjmp ADSR_EXIT
                                  ATTACK_INSTANT:
-0001cf ef4f                      	ldi r20, $FF
-0001d0 834e                      	std y+6, r20
-0001d1 c024                      	rjmp NEXT_PHASE
+0001d0 ef4f                      	ldi r20, $FF
+0001d1 834e                      	std y+6, r20
+0001d2 c024                      	rjmp NEXT_PHASE
                                  	
                                  DECAY:
-0001d2 9110 0104                 	lds r17, ENVELOPE_DECAY ;step
-0001d4 2311                      	tst r17
-0001d5 f051                      	breq DECAY_INSTANT
-0001d6 9510                      	com r17
-0001d7 0f21                      	add r18, r17
-0001d8 f500                      	brcc ADSR_EXIT
-0001d9 954a                      	dec r20
-0001da 834e                      	std y+6, r20
-0001db 9150 0105                 	lds r21, ENVELOPE_SUBSTAIN
-0001dd 1745                      	cp r20, r21
-0001de f0b9                      	breq NEXT_PHASE
-0001df c019                      	rjmp ADSR_EXIT
+0001d3 9110 0104                 	lds r17, ENVELOPE_DECAY ;step
+0001d5 2311                      	tst r17
+0001d6 f051                      	breq DECAY_INSTANT
+0001d7 9510                      	com r17
+0001d8 0f21                      	add r18, r17
+0001d9 f500                      	brcc ADSR_EXIT
+0001da 954a                      	dec r20
+0001db 834e                      	std y+6, r20
+0001dc 9150 0105                 	lds r21, ENVELOPE_SUBSTAIN
+0001de 1745                      	cp r20, r21
+0001df f0b9                      	breq NEXT_PHASE
+0001e0 c019                      	rjmp ADSR_EXIT
                                  DECAY_INSTANT:
-0001e0 9140 0105                 	lds r20, ENVELOPE_SUBSTAIN
-0001e2 834e                      	std y+6, r20
-0001e3 c012                      	rjmp NEXT_PHASE
+0001e1 9140 0105                 	lds r20, ENVELOPE_SUBSTAIN
+0001e3 834e                      	std y+6, r20
+0001e4 c012                      	rjmp NEXT_PHASE
                                  	
                                  SUBSTAIN:
-0001e4 c014                      	rjmp ADSR_EXIT
+0001e5 c014                      	rjmp ADSR_EXIT
                                  	
                                  RELEASE:
-0001e5 9110 0106                 	lds r17, ENVELOPE_RELEASE ;step
-0001e7 2311                      	tst r17
-0001e8 f049                      	breq RELEASE_INSTANT
-0001e9 9510                      	com r17
-0001ea 0f21                      	add r18, r17
-0001eb f468                      	brcc ADSR_EXIT
-0001ec 954a                      	dec r20
-0001ed 834e                      	std y+6, r20
-0001ee 2344                      	tst r20
-0001ef f449                      	brne ADSR_EXIT
-0001f0 de6b                      	rcall CLEAR_OSCILLATORS
-0001f1 c007                      	rjmp ADSR_EXIT
+0001e6 9110 0106                 	lds r17, ENVELOPE_RELEASE ;step
+0001e8 2311                      	tst r17
+0001e9 f049                      	breq RELEASE_INSTANT
+0001ea 9510                      	com r17
+0001eb 0f21                      	add r18, r17
+0001ec f468                      	brcc ADSR_EXIT
+0001ed 954a                      	dec r20
+0001ee 834e                      	std y+6, r20
+0001ef 2344                      	tst r20
+0001f0 f449                      	brne ADSR_EXIT
+0001f1 de6b                      	rcall CLEAR_OSCILLATORS
+0001f2 c007                      	rjmp ADSR_EXIT
                                  RELEASE_INSTANT:
-0001f2 2744                      	clr r20
-0001f3 834e                      	std y+6, r20
-0001f4 de67                      	rcall CLEAR_OSCILLATORS
-0001f5 c003                      	rjmp ADSR_EXIT
+0001f3 2744                      	clr r20
+0001f4 834e                      	std y+6, r20
+0001f5 de67                      	rcall CLEAR_OSCILLATORS
+0001f6 c003                      	rjmp ADSR_EXIT
                                  
                                  NEXT_PHASE:
-0001f6 9503                      	inc r16
-0001f7 830c                      	std y+4, r16
-0001f8 2722                      	clr r18
+0001f7 9503                      	inc r16
+0001f8 830c                      	std y+4, r16
+0001f9 2722                      	clr r18
                                  ADSR_EXIT:
-0001f9 832d                      	std y+5, r18
-0001fa 9508                      	ret
+0001fa 832d                      	std y+5, r18
+0001fb 9508                      	ret
                                  
                                  
                                  
@@ -1655,60 +1652,60 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(5): 'C:
                                  
                                  
                                  WAVE:
-0001fb 93ef                      	push ZL
-0001fc 93ff                      	push ZH
+0001fc 93ef                      	push ZL
+0001fd 93ff                      	push ZH
                                  
-0001fd e0e4                      	ldi ZL, low(WAVE_TABLE)
-0001fe e0f2                      	ldi ZH, high(WAVE_TABLE)
-0001ff 9100 0101                 	lds r16, WAVEFORM
-000201 0fe0
-000202 1df2                      	addz r16
-000203 9409                      	ijmp
+0001fe e0e5                      	ldi ZL, low(WAVE_TABLE)
+0001ff e0f2                      	ldi ZH, high(WAVE_TABLE)
+000200 9100 0101                 	lds r16, WAVEFORM
+000202 0fe0
+000203 1df2                      	addz r16
+000204 9409                      	ijmp
                                  WAVE_TABLE:
-000204 c003                      	rjmp SINE_WAVE
-000205 c00e                      	rjmp SQUARE_WAVE
-000206 c010                      	rjmp SAWTOOTH_WAVE
-000207 c012                      	rjmp TRIANGLE_WAVE
+000205 c003                      	rjmp SINE_WAVE
+000206 c00e                      	rjmp SQUARE_WAVE
+000207 c010                      	rjmp SAWTOOTH_WAVE
+000208 c012                      	rjmp TRIANGLE_WAVE
                                  
                                  SINE_WAVE:
-000208 93ef                      	push ZL
-000209 93ff                      	push ZH
-00020a ebec
-00020b e0f1                      	loadz SINE_TABLE
-00020c 0fe3
-00020d 1df2                      	addz r19
-00020e 9104                      	lpm r16, Z
-00020f 9f01                      	mul r16, r17
-000210 0d71                      	add r23, r1
-000211 91ff                      	pop ZH
-000212 91ef                      	pop ZL
-000213 c00e                      	rjmp WAVE_EXIT
+000209 93ef                      	push ZL
+00020a 93ff                      	push ZH
+00020b ebee
+00020c e0f1                      	loadz SINE_TABLE
+00020d 0fe3
+00020e 1df2                      	addz r19
+00020f 9104                      	lpm r16, Z
+000210 9f01                      	mul r16, r17
+000211 0d71                      	add r23, r1
+000212 91ff                      	pop ZH
+000213 91ef                      	pop ZL
+000214 c00e                      	rjmp WAVE_EXIT
                                  
                                  SQUARE_WAVE:
-000214 fd37                      	sbrc r19, 7
-000215 0f71                      	add r23, r17
-000216 c00b                      	rjmp WAVE_EXIT
+000215 fd37                      	sbrc r19, 7
+000216 0f71                      	add r23, r17
+000217 c00b                      	rjmp WAVE_EXIT
                                  
                                  SAWTOOTH_WAVE:
-000217 9f31                      	mul r19, r17    ; Scale by volume
-000218 0d71                          add r23, r1     ; Add high byte to mixer
-000219 c008                      	rjmp WAVE_EXIT
+000218 9f31                      	mul r19, r17    ; Scale by volume
+000219 0d71                          add r23, r1     ; Add high byte to mixer
+00021a c008                      	rjmp WAVE_EXIT
                                  
                                  TRIANGLE_WAVE:
-00021a 933f                      	push r19
-00021b fd37                          sbrc r19, 7     ; Is it the second half of the wave?
-00021c 9530                          com r19         ; If bit 7 is set, invert the value (creates the "down" slope)
-00021d 0f33                          lsl r19         ; Multiply by 2 to keep the amplitude full (0-255)
-00021e 9f31                          mul r19, r17    ; Scale by volume
-00021f 0d71                          add r23, r1     ; Add high byte to mixer
-000220 913f                      	pop r19
-000221 c000                      	rjmp WAVE_EXIT
+00021b 933f                      	push r19
+00021c fd37                          sbrc r19, 7     ; Is it the second half of the wave?
+00021d 9530                          com r19         ; If bit 7 is set, invert the value (creates the "down" slope)
+00021e 0f33                          lsl r19         ; Multiply by 2 to keep the amplitude full (0-255)
+00021f 9f31                          mul r19, r17    ; Scale by volume
+000220 0d71                          add r23, r1     ; Add high byte to mixer
+000221 913f                      	pop r19
+000222 c000                      	rjmp WAVE_EXIT
                                  
                                  WAVE_EXIT:
-000222 91ff                      	pop ZH
-000223 91ef                      	pop ZL
+000223 91ff                      	pop ZH
+000224 91ef                      	pop ZL
                                  .include "keys.asm"
-000224 9508                      
+000225 9508                      
                                  
                                  .dseg
 00012c                           	KEYS_PRESSED:	.byte	1
@@ -1718,99 +1715,109 @@ C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm(5): 'C:
                                  .cseg
                                  
                                  INITIALIZE_KEYS:
-000225 9220 012c                 	sts KEYS_PRESSED, r2
-000227 9220 012d                 	sts DEBOUNCE_FLAG, r2
-000229 9220 012e                 	sts KEYS_STATE, r2
-00022b 9508                      	ret
+000226 9220 012c                 	sts KEYS_PRESSED, r2
+000228 9220 012d                 	sts DEBOUNCE_FLAG, r2
+00022a 9220 012e                 	sts KEYS_STATE, r2
+00022c 9508                      	ret
                                  
                                  CHECK_KEYS:
-00022c 930f                      	push r16
-00022d 9100 012c                 	lds r16, KEYS_PRESSED
-00022f 2300                      	tst r16
-000230 f009                      	breq NOT_PRESSED
-000231 f419                      	brne PRESSED_KEY
+00022d 930f                      	push r16
+00022e 9100 012c                 	lds r16, KEYS_PRESSED
+000230 2300                      	tst r16
+000231 f009                      	breq NOT_PRESSED
+000232 f419                      	brne PRESSED_KEY
                                  
                                  NOT_PRESSED:
-000232 9b4f                      	sbis PIND, 7
-000233 c004                      	rjmp UPDATE_DEBOUNCE_TIMER
-000234 c010                      	rjmp CLEAR_DEBOUNCE_TIMER
+000233 9b4f                      	sbis PIND, 7
+000234 c004                      	rjmp UPDATE_DEBOUNCE_TIMER
+000235 c010                      	rjmp CLEAR_DEBOUNCE_TIMER
                                  	
                                  PRESSED_KEY:
-000235 994f                      	sbic PIND, 7
-000236 c001                      	rjmp UPDATE_DEBOUNCE_TIMER
-000237 c00d                      	rjmp CLEAR_DEBOUNCE_TIMER
+000236 994f                      	sbic PIND, 7
+000237 c001                      	rjmp UPDATE_DEBOUNCE_TIMER
+000238 c00d                      	rjmp CLEAR_DEBOUNCE_TIMER
                                  
                                  UPDATE_DEBOUNCE_TIMER:
-000238 9100 012e                 	lds r16, KEYS_STATE
-00023a 9503                      	inc r16
-00023b 9300 012e                 	sts KEYS_STATE, r16
+000239 9100 012e                 	lds r16, KEYS_STATE
+00023b 9503                      	inc r16
+00023c 9300 012e                 	sts KEYS_STATE, r16
                                  
-00023d 3f0f                      	cpi r16, DEBOUNCE_DELAY
-00023e f451                      	brne CHECK_KEYS_EXIT
+00023e 3f0f                      	cpi r16, DEBOUNCE_DELAY
+00023f f451                      	brne CHECK_KEYS_EXIT
                                  
                                  CHANGE_KEY_PRESSED:
-00023f 9100 012c                 	lds r16, KEYS_PRESSED
-000241 9500                      	com r16
-000242 9300 012c                 	sts KEYS_PRESSED, r16
-000244 d008                      	rcall ADD_NOTE_MAYBE
+000240 9100 012c                 	lds r16, KEYS_PRESSED
+000242 9500                      	com r16
+000243 9300 012c                 	sts KEYS_PRESSED, r16
+000245 d008                      	rcall ADD_NOTE_MAYBE
                                  
                                  CLEAR_DEBOUNCE_TIMER:
-000245 2700                      	clr r16
-000246 9300 012e                 	sts KEYS_STATE, r16
-000248 c000                      	rjmp CHECK_KEYS_EXIT
+000246 2700                      	clr r16
+000247 9300 012e                 	sts KEYS_STATE, r16
+000249 c000                      	rjmp CHECK_KEYS_EXIT
                                  	
                                  CHECK_KEYS_EXIT:
-000249 9220 00ff                 	sts DEBOUNCE_DELAY, r2
-00024b 910f                      	pop r16
-00024c 9508                      	ret
+00024a 9220 00ff                 	sts DEBOUNCE_DELAY, r2
+00024c 910f                      	pop r16
+00024d 9508                      	ret
                                  
                                  ADD_NOTE_MAYBE:
-00024d 9100 012c                 	lds r16, KEYS_PRESSED
-00024f 2300                      	tst r16
-000250 f409                      	brne CONTINUE
-000251 9508                      	ret
+00024e 9100 012c                 	lds r16, KEYS_PRESSED
+000250 2300                      	tst r16
+000251 f409                      	brne CONTINUE
+000252 9508                      	ret
                                  
                                  CONTINUE:
-000252 ec0d
-000253 e011
-000254 de22                      	note 440
-000255 9508                      
+000253 ec0d
+000254 e011
+000255 de22                      	note 440
+000256 eb04
+000257 e012
+000258 de1f                      	note 660
+000259 9508                      
                                  
                                  COLD:
-000256 ef0f                      	ldi r16, LOW(RAMEND)
-000257 bf0d                      	out SPL, r16
-000258 e008                      	ldi r16, HIGH(RAMEND)
-000259 bf0e                      	out SPH, r16
+00025a ef0f                      	ldi r16, LOW(RAMEND)
+00025b bf0d                      	out SPL, r16
+00025c e008                      	ldi r16, HIGH(RAMEND)
+00025d bf0e                      	out SPH, r16
                                  
-00025a ddc1                      	rcall HW
-00025b de00                      	rcall CLEAR_OSCILLATORS
-00025c dde0                      	rcall INITIALIZE_VALUES
-00025d dfc7                      	rcall INITIALIZE_KEYS
+00025e d006                      	rcall INITIALIZE_HARDWARE
+00025f ddaf                      	rcall INITIALIZE_INTERUPTS
+000260 ddfc                      	rcall CLEAR_OSCILLATORS
+000261 dddc                      	rcall INITIALIZE_VALUES
+000262 dfc3                      	rcall INITIALIZE_KEYS
+000263 9478                      	sei
+000264 c007                      	rjmp MAIN
                                  
-                                 WARM:
-                                 
-                                 
-00025e 9478                      	sei
+                                 INITIALIZE_HARDWARE:
+000265 9a21                      	sbi DDRB, 1
+000266 e004                      	ldi r16, 0b00000100
+000267 b90a                      	out DDRD, r16
+000268 ef08                      	ldi r16, 0b11111000
+000269 b90b                      	out PORTD, r16
+00026a 2422                      	clr r2
+00026b 9508                      	ret
                                  
                                  MAIN:
-00025f 9100 012d                 	lds r16, DEBOUNCE_FLAG
-000261 1102                      	cpse r16, r2
-000262 dfc9                      	rcall CHECK_KEYS
-000263 d001                      	rcall LIGHT
+00026c 9100 012d                 	lds r16, DEBOUNCE_FLAG
+00026e 1102                      	cpse r16, r2
+00026f dfbd                      	rcall CHECK_KEYS
+000270 d001                      	rcall LIGHT
                                  
-000264 cffa                      	rjmp MAIN
+000271 cffa                      	rjmp MAIN
                                  
                                  LIGHT:
-000265 9100 012c                 	lds r16, KEYS_PRESSED
-000267 2300                      	tst r16
-000268 f011                      	breq TURN_OFF
+000272 9100 012c                 	lds r16, KEYS_PRESSED
+000274 2300                      	tst r16
+000275 f011                      	breq TURN_OFF
                                  	
                                  TURN_ON:
-000269 9a5a                      	sbi PORTD, 2
-00026a 9508                      	ret
+000276 9a5a                      	sbi PORTD, 2
+000277 9508                      	ret
                                  
                                  TURN_OFF:
-00026b 985a                      	cbi PORTD, 2
+000278 985a                      	cbi PORTD, 2
 
 
 RESOURCE USE INFORMATION
@@ -1828,9 +1835,9 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega328P" register use summary:
-x  :   9 y  :  31 z  :   1 r0 :   2 r1 :   4 r2 :  33 r3 :   0 r4 :   0 
+x  :   9 y  :  31 z  :   1 r0 :   2 r1 :   4 r2 :  34 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16: 124 r17:  35 r18:  37 r19:  20 r20:  26 
+r13:   0 r14:   0 r15:   0 r16: 129 r17:  36 r18:  37 r19:  20 r20:  26 
 r21:  15 r22:   0 r23:   8 r24:   0 r25:   0 r26:   4 r27:   4 r28:  16 
 r29:  16 r30:   8 r31:   8 
 Registers used: 19 out of 35 (54.3%)
@@ -1842,15 +1849,15 @@ brcc  :   3 brcs  :   0 break :   0 breq  :  13 brge  :   0 brhc  :   0
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
 brne  :  12 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   1 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   9 cls   :   0 
+clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :  10 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   5 cp    :   2 cpc   :   0 
 cpi   :   6 cpse  :   2 dec   :  10 eor   :   0 fmul  :   0 fmuls :   0 
 fmulsu:   0 icall :   0 ijmp  :   1 in    :   1 inc   :   4 jmp   :   0 
-ld    :   2 ldd   :   7 ldi   :  50 lds   :  20 lpm   :   2 lsl   :   3 
+ld    :   2 ldd   :   7 ldi   :  54 lds   :  20 lpm   :   2 lsl   :   3 
 lsr   :   4 mov   :   3 movw  :   0 mul   :   6 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   1 ori   :   0 out   :   5 pop   :  38 
-push  :  38 rcall :  23 ret   :  23 reti  :   1 rjmp  :  27 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   2 sbic  :   1 sbis  :   1 
+neg   :   0 nop   :   0 or    :   1 ori   :   0 out   :   7 pop   :  38 
+push  :  38 rcall :  25 ret   :  25 reti  :   1 rjmp  :  28 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   0 sbi   :   3 sbic  :   1 sbis  :   1 
 sbiw  :   0 sbr   :   0 sbrc  :   3 sbrs  :   1 sec   :   0 seh   :   0 
 sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
 sez   :   0 sleep :   0 spm   :   0 st    :   9 std   :  22 sts   :  26 
@@ -1860,7 +1867,7 @@ Instructions used: 47 out of 113 (41.6%)
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x0004da    954    262   1216   32768   3.7%
+[.cseg] 0x000000 0x0004f4    980    262   1242   32768   3.8%
 [.dseg] 0x000100 0x00012f      0     47     47    2048   2.3%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

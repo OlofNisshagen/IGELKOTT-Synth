@@ -29,7 +29,8 @@
  </OUTPUT_FILES>
  <LABELS>
   <COLD><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>9</LINE></COLD>
-  <TIMER_2><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\interupts.asm</FILE><LINE>6</LINE></TIMER_2>
+  <TIMER_2><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\interupts.asm</FILE><LINE>21</LINE></TIMER_2>
+  <INITIALIZE_INTERUPTS><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\interupts.asm</FILE><LINE>6</LINE></INITIALIZE_INTERUPTS>
   <UPDATE_OSCILLATORS><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\sound.asm</FILE><LINE>1</LINE></UPDATE_OSCILLATORS>
   <DEBOUNCE_FLAG><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>5</LINE></DEBOUNCE_FLAG>
   <HW><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\hw.asm</FILE><LINE>1</LINE></HW>
@@ -105,10 +106,10 @@
   <CHANGE_KEY_PRESSED><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>41</LINE></CHANGE_KEY_PRESSED>
   <ADD_NOTE_MAYBE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>57</LINE></ADD_NOTE_MAYBE>
   <CONTINUE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\keys.asm</FILE><LINE>63</LINE></CONTINUE>
-  <WARM><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>20</LINE></WARM>
-  <MAIN><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>25</LINE></MAIN>
-  <LIGHT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>33</LINE></LIGHT>
-  <TURN_OFF><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>42</LINE></TURN_OFF>
-  <TURN_ON><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>38</LINE></TURN_ON>
+  <INITIALIZE_HARDWARE><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>23</LINE></INITIALIZE_HARDWARE>
+  <MAIN><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>32</LINE></MAIN>
+  <LIGHT><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>40</LINE></LIGHT>
+  <TURN_OFF><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>49</LINE></TURN_OFF>
+  <TURN_ON><FILE>C:\Users\olof\Documents\Atmel Studio\Projects\IGELKOTT\IGELKOTT\main.asm</FILE><LINE>45</LINE></TURN_ON>
  </LABELS>
 </ASSEMBLER_INFO>
